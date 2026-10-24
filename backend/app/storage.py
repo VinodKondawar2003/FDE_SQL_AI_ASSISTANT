@@ -19,13 +19,7 @@ def token_hash(value):
     return hashlib.sha256(value.encode()).hexdigest()
 
 
-class Store:
-    def __init__(self, path):
-        self.path = path
-        path.parent.mkdir(parents=True, exist_ok=True)
-        with self.db() as con:
-            con.executescript("""
-            PRAGMA journal_mode=WAL;
+SCHEMA = """
             CREATE TABLE IF NOT EXISTS sessions(
                 id TEXT PRIMARY KEY, token_hash TEXT UNIQUE NOT NULL,
                 csrf TEXT NOT NULL, expires REAL NOT NULL);
@@ -48,7 +42,17 @@ class Store:
             CREATE TABLE IF NOT EXISTS quotas(
                 bucket TEXT PRIMARY KEY, used INTEGER NOT NULL, expires REAL NOT NULL);
             CREATE INDEX IF NOT EXISTS idx_turns_conversation ON turns(conversation_id,created);
-            """)
+"""
+
+
+class Store:
+    distributed = False
+
+    def __init__(self, path):
+        self.path = path
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with self.db() as con:
+            con.executescript("PRAGMA journal_mode=WAL;" + SCHEMA)
 
     @contextmanager
     def db(self):
@@ -164,7 +168,7 @@ class Store:
             if response.get("sql"):
                 q = response["sql"]
                 con.execute(
-                    "INSERT OR IGNORE INTO artifacts VALUES (?,?,?,?,?,?,?)",
+                    "INSERT INTO artifacts VALUES (?,?,?,?,?,?,?) ON CONFLICT(id) DO NOTHING",
                     (
                         q["artifact_id"],
                         tid,
@@ -180,8 +184,15 @@ class Store:
                 (response["status"], json.dumps(response), tid),
             )
 
-    def pending(self):
+    def pending(self, cid=None):
         with self.db() as con:
+            if cid is not None:
+                return [
+                    dict(r)
+                    for r in con.execute(
+                        "SELECT * FROM turns WHERE conversation_id=? AND status='processing'", (cid,)
+                    )
+                ]
             return [dict(r) for r in con.execute("SELECT * FROM turns WHERE status='processing'")]
 
     def artifact(self, aid, sid):
@@ -242,15 +253,16 @@ class Store:
                     "RATE_LIMIT", "The demo request limit has been reached. Try again later.", 429, True
                 )
             con.execute(
-                "INSERT INTO quotas VALUES (?,1,?) ON CONFLICT(bucket) DO UPDATE SET used=used+1",
+                "INSERT INTO quotas VALUES (?,1,?) ON CONFLICT(bucket) DO UPDATE SET used=quotas.used+1",
                 (bucket, now + seconds),
             )
 
     def cleanup(self):
         now = time.time()
         with self.db() as con:
+            con.execute("BEGIN IMMEDIATE")
             expired = [
-                r[0]
+                r["id"]
                 for r in con.execute(
                     """SELECT c.id FROM conversations c JOIN sessions s ON c.session_id=s.id
                 WHERE (s.expires<? OR c.updated<?) AND NOT EXISTS(

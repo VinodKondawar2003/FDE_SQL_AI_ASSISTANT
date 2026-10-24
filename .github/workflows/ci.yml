@@ -3,6 +3,17 @@ on: [push, pull_request]
 jobs:
   check:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: querycraft
+          POSTGRES_PASSWORD: ci-only-password
+          POSTGRES_DB: querycraft
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U querycraft"
+          --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -17,6 +28,12 @@ jobs:
       - run: .venv/bin/python -m pip install -r requirements.lock
       - run: .venv/bin/python -m ruff check backend data scripts evals
       - run: .venv/bin/python -m pytest -q
+      - name: PostgreSQL integration tests
+        run: .venv/bin/python -m pytest backend/tests/test_postgres.py -q
+        env:
+          RUN_POSTGRES_TESTS: "1"
+          DATABASE_URL: postgresql://querycraft:ci-only-password@localhost:5432/querycraft
+          DATABASE_URL_UNPOOLED: postgresql://querycraft:ci-only-password@localhost:5432/querycraft
       - run: npm ci
         working-directory: frontend
       - run: npm run build

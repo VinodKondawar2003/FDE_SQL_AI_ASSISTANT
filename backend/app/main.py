@@ -13,7 +13,6 @@ from fastapi import Depends, FastAPI, Query, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
-from langgraph.checkpoint.sqlite.aio import AsyncSqliteSaver
 from pydantic import BaseModel, ConfigDict, Field
 
 from backend.app.agent.graph import Agent
@@ -23,6 +22,7 @@ from backend.app.errors import AppError
 from backend.app.sql.catalog import Catalog
 from backend.app.sql.service import SqlService, VALIDATOR_VERSION, digest
 from backend.app.storage import Store
+from backend.app.postgres import Operations, PostgresStore, checkpointer
 
 log = logging.getLogger("querycraft")
 COOKIE = "querycraft_session"
@@ -81,39 +81,44 @@ def csv_snapshot(result):
 
 def create_app(settings=None, model_factory=None):
     settings = settings or Settings()
-    active = set()
-    active_models = set()
+    operations = Operations(settings)
+
+    async def recover(app, cid=None):
+        store, agent = app.state.store, app.state.agent
+        for turn in store.pending(cid):
+            state = await agent.graph.aget_state({"configurable": {"thread_id": turn["conversation_id"]}})
+            completed = state.values.get("response") or {}
+            if completed.get("turn_id") == turn["id"]:
+                store.complete(turn["id"], completed, VALIDATOR_VERSION)
+            else:
+                error = AppError(
+                    "INTERRUPTED",
+                    "The server restarted during this response. Send the request again.",
+                    503,
+                    True,
+                )
+                store.complete(
+                    turn["id"],
+                    failure(turn["conversation_id"], turn["id"], turn["request_id"], error),
+                    VALIDATOR_VERSION,
+                )
 
     @asynccontextmanager
     async def lifespan(app):
-        settings.state_dir.mkdir(parents=True, exist_ok=True)
+        if not settings.database_url:
+            settings.state_dir.mkdir(parents=True, exist_ok=True)
         app.state.settings = settings
-        app.state.store = store = Store(settings.state_dir / "app.db")
+        app.state.store = store = (
+            PostgresStore(settings) if settings.database_url else Store(settings.state_dir / "app.db")
+        )
         app.state.catalog = catalog = Catalog(settings.sample_db)
         app.state.sql = SqlService(catalog, settings.query_timeout)
-        async with AsyncSqliteSaver.from_conn_string(str(settings.state_dir / "checkpoints.db")) as saver:
-            await saver.setup()
+        async with checkpointer(settings) as saver:
             app.state.saver = saver
             model = model_factory(settings, store) if model_factory else GeminiModel(settings, store)
-            app.state.agent = agent = Agent(model, app.state.sql, saver)
-            # Resolve checkpoint-before-API-commit crashes without duplicating completed model work.
-            for turn in store.pending():
-                state = await agent.graph.aget_state({"configurable": {"thread_id": turn["conversation_id"]}})
-                completed = state.values.get("response") or {}
-                if completed.get("turn_id") == turn["id"]:
-                    store.complete(turn["id"], completed, VALIDATOR_VERSION)
-                else:
-                    error = AppError(
-                        "INTERRUPTED",
-                        "The server restarted during this response. Send the request again.",
-                        503,
-                        True,
-                    )
-                    store.complete(
-                        turn["id"],
-                        failure(turn["conversation_id"], turn["id"], turn["request_id"], error),
-                        VALIDATOR_VERSION,
-                    )
+            app.state.agent = Agent(model, app.state.sql, saver)
+            if not settings.database_url:
+                await recover(app)
 
             async def cleanup():
                 while True:
@@ -121,15 +126,16 @@ def create_app(settings=None, model_factory=None):
                         await saver.adelete_thread(cid)
                     await asyncio.sleep(600)
 
-            cleanup_task = asyncio.create_task(cleanup())
+            cleanup_task = asyncio.create_task(cleanup()) if not settings.database_url else None
             try:
                 yield
             finally:
-                cleanup_task.cancel()
-                try:
-                    await cleanup_task
-                except asyncio.CancelledError:
-                    pass
+                if cleanup_task:
+                    cleanup_task.cancel()
+                    try:
+                        await cleanup_task
+                    except asyncio.CancelledError:
+                        pass
 
     app = FastAPI(title="Querycraft SQL Assistant", version="1.0.0", lifespan=lifespan)
 
@@ -177,7 +183,7 @@ def create_app(settings=None, model_factory=None):
             request._body = bytes(body)
             if (
                 request.method in {"POST", "DELETE", "PUT", "PATCH"}
-                and request.headers.get("origin") != settings.public_origin
+                and request.headers.get("origin") not in settings.allowed_origins
             ):
                 return JSONResponse(
                     {
@@ -228,6 +234,9 @@ def create_app(settings=None, model_factory=None):
     @app.post("/api/v1/session")
     async def new_session(request: Request):
         store = request.app.state.store
+        if settings.database_url and store.claim_cleanup():
+            for expired_cid in store.cleanup():
+                await request.app.state.saver.adelete_thread(expired_cid)
         try:
             current = store.session(request.cookies.get(COOKIE))
             return session_response(current)
@@ -303,14 +312,9 @@ def create_app(settings=None, model_factory=None):
         cid = str(cid)
         store = request.app.state.store
         store.conversation(cid, current["id"])
-        if cid in active:
-            raise AppError("TURN_BUSY", "Wait for the current operation to finish.", 409, True)
-        active.add(cid)
-        try:
+        async with operations.hold(cid):
             await request.app.state.saver.adelete_thread(cid)
             store.delete(cid, current["id"])
-        finally:
-            active.discard(cid)
         return Response(status_code=204)
 
     @app.post("/api/v1/conversations/{cid}/messages")
@@ -320,50 +324,50 @@ def create_app(settings=None, model_factory=None):
         store.conversation(cid, current["id"])
         if not data.message.strip():
             raise AppError("EMPTY_MESSAGE", "Enter a question or SQL query.", 422)
-        if cid in active:
-            raise AppError("TURN_BUSY", "Wait for the current operation to finish.", 409, True)
-        if len(active_models) >= settings.global_concurrency:
-            raise AppError("BUSY", "The assistant is busy. Please retry shortly.", 429, True)
-        tid, replay = store.begin_turn(cid, rid, data.message, data.mode)
-        if replay is not None:
-            return JSONResponse(replay, status_code=replay.get("meta", {}).get("http_status", 200))
-        active.add(cid)
-        active_models.add(cid)
-        try:
-            store.charge("messages:" + current["id"], settings.session_rate)
-            store.charge("model-ip:" + str(request.client.host), settings.ip_rate)
-            history = [
-                {"user": t["message"], "assistant": (t["response"] or {}).get("message", "")}
-                for t in store.history(cid, limit=10)["items"]
-                if t["id"] != tid
-            ]
-            response = await asyncio.wait_for(
-                request.app.state.agent.run(cid, tid, rid, data.message, data.mode, history),
-                timeout=settings.turn_timeout,
-            )
-        except asyncio.CancelledError:
-            store.complete(
-                tid,
-                failure(cid, tid, rid, AppError("CANCELLED", "The response was interrupted.", 503, True)),
-                VALIDATOR_VERSION,
-            )
-            raise
-        except TimeoutError:
-            response = failure(
-                cid, tid, rid, AppError("TURN_TIMEOUT", "The response timed out. Please retry.", 504, True)
-            )
-        except AppError as exc:
-            response = failure(cid, tid, rid, exc)
-        except Exception:
-            log.error("turn_failed turn_id=%s", tid)
-            response = failure(
-                cid, tid, rid, AppError("INTERNAL_ERROR", "The response could not be completed.", 500, True)
-            )
-        finally:
-            active.discard(cid)
-            active_models.discard(cid)
-        store.complete(tid, response, VALIDATOR_VERSION)
-        return JSONResponse(response, status_code=response.get("meta", {}).get("http_status", 200))
+        async with operations.hold(cid, model=True):
+            if settings.database_url:
+                await recover(request.app, cid)
+            tid, replay = store.begin_turn(cid, rid, data.message, data.mode)
+            if replay is not None:
+                return JSONResponse(replay, status_code=replay.get("meta", {}).get("http_status", 200))
+            try:
+                store.charge("messages:" + current["id"], settings.session_rate)
+                store.charge("model-ip:" + str(request.client.host), settings.ip_rate)
+                history = [
+                    {"user": t["message"], "assistant": (t["response"] or {}).get("message", "")}
+                    for t in store.history(cid, limit=10)["items"]
+                    if t["id"] != tid
+                ]
+                response = await asyncio.wait_for(
+                    request.app.state.agent.run(cid, tid, rid, data.message, data.mode, history),
+                    timeout=settings.turn_timeout,
+                )
+            except asyncio.CancelledError:
+                store.complete(
+                    tid,
+                    failure(cid, tid, rid, AppError("CANCELLED", "The response was interrupted.", 503, True)),
+                    VALIDATOR_VERSION,
+                )
+                raise
+            except TimeoutError:
+                response = failure(
+                    cid,
+                    tid,
+                    rid,
+                    AppError("TURN_TIMEOUT", "The response timed out. Please retry.", 504, True),
+                )
+            except AppError as exc:
+                response = failure(cid, tid, rid, exc)
+            except Exception:
+                log.error("turn_failed turn_id=%s", tid)
+                response = failure(
+                    cid,
+                    tid,
+                    rid,
+                    AppError("INTERNAL_ERROR", "The response could not be completed.", 500, True),
+                )
+            store.complete(tid, response, VALIDATOR_VERSION)
+            return JSONResponse(response, status_code=response.get("meta", {}).get("http_status", 200))
 
     def artifact(request, aid, current):
         row = request.app.state.store.artifact(str(aid), current["id"])
@@ -382,25 +386,22 @@ def create_app(settings=None, model_factory=None):
     async def execute(aid: UUID, data: ExecuteInput, request: Request, current=Depends(mutation)):
         row = artifact(request, aid, current)
         cid, store = row["conversation_id"], request.app.state.store
-        replay = store.previous_execution(str(aid), str(data.request_id))
-        if replay:
-            return replay
-        if cid in active:
-            raise AppError("TURN_BUSY", "Wait for the current operation to finish.", 409, True)
-        store.charge("execute:" + current["id"], settings.execution_rate)
-        active.add(cid)
-        cancel = threading.Event()
-        try:
-            result = await asyncio.wait_for(
-                asyncio.to_thread(request.app.state.sql.execute, row["sql"], cancel),
-                timeout=settings.query_timeout + 1,
-            )
-            return store.save_execution(str(aid), str(data.request_id), result)
-        except TimeoutError:
-            raise AppError("QUERY_TIMEOUT", "The query exceeded its execution budget.", 504, True)
-        finally:
-            cancel.set()
-            active.discard(cid)
+        async with operations.hold(cid):
+            replay = store.previous_execution(str(aid), str(data.request_id))
+            if replay:
+                return replay
+            store.charge("execute:" + current["id"], settings.execution_rate)
+            cancel = threading.Event()
+            try:
+                result = await asyncio.wait_for(
+                    asyncio.to_thread(request.app.state.sql.execute, row["sql"], cancel),
+                    timeout=settings.query_timeout + 1,
+                )
+                return store.save_execution(str(aid), str(data.request_id), result)
+            except TimeoutError:
+                raise AppError("QUERY_TIMEOUT", "The query exceeded its execution budget.", 504, True)
+            finally:
+                cancel.set()
 
     @app.get("/api/v1/queries/{aid}/plan")
     async def plan(aid: UUID, request: Request, current=Depends(session)):

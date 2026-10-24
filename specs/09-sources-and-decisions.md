@@ -59,3 +59,5 @@ Approval history: user approved all specifications on 2026-10-23 and authorized 
 Implementation compatibility decisions: local verification uses Python 3.13 (the installed interpreter), Docker targets Python 3.13, and the code remains Python 3.12-compatible. The available, generation-tested provider model is gemini-3.5-flash-lite; the initially configured 1.5 Flash was unavailable and 2.5 Flash rejected generation for this account. Provider-reported request limits require paced evaluation. Session cookies are opaque random tokens; CSRF uses random per-session tokens, so no unused SESSION_SECRET is required.
 
 See docs/validation.md for actual results rather than treating acceptance criteria as completed tests.
+
+2026-10-24, D13: User requested Vercel after Render/Railway login failures and configured Neon. Amendment [10](10-vercel-deployment.md) replaces the single-instance hosting boundary with PostgreSQL storage, distributed locks, and request-driven cleanup. The synthetic SQLite query dialect and read-only validation remain unchanged. References: https://vercel.com/docs/frameworks/backend/fastapi and https://neon.com/docs/connect/connect-from-any-app.

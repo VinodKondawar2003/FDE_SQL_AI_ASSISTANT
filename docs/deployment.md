@@ -1,6 +1,6 @@
 # Deployment runbook
 
-The user chose to finish local verification first and connect deployment accounts later. No public deployment has been created.
+The current target is Vercel + Neon. Follow the [Vercel deployment walkthrough](deployment-vercel.md). PostgreSQL persistence is locally verified; no public Vercel deployment has been verified yet. Docker and the original Render alternative are documented below.
 
 ## Local
 

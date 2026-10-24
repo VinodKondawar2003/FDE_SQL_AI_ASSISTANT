@@ -4,7 +4,7 @@ A focused SQL assistant that turns natural language into validated, read-only SQ
 
 ![Querycraft workspace](docs/screenshots/workspace.png)
 
-Built from the approved [specifications](specs/README.md). React + TypeScript, FastAPI, LangGraph, Google Gemini, SQLGlot, and SQLite.
+Built from the approved [specifications](specs/README.md). React + TypeScript, FastAPI, LangGraph, Google Gemini, SQLGlot, SQLite, and optional Neon PostgreSQL persistence.
 
 ## Run on Windows
 
@@ -49,7 +49,11 @@ Set the two Gemini settings before starting. Do not overwrite an existing .env. 
 docker compose up --build
 ```
 
-The image creates the synthetic sample database at build time and runs as a non-root user. Writable application state persists in the named volume. The sample database is separate and read-only. Docker must be installed locally; see the validation report for what was actually tested.
+The image creates the synthetic sample database at build time and runs as a non-root user. Without DATABASE_URL, writable application state persists in the named volume. If the two database URLs are configured, state uses PostgreSQL instead; run scripts.setup_database locally first. The sample database is separate and read-only. Docker must be installed locally; see the validation report for what was actually tested.
+
+## Vercel deployment
+
+Follow the [Vercel + Neon walkthrough](docs/deployment-vercel.md). Import the repository root with the FastAPI preset and add the two Gemini settings plus DATABASE_URL and DATABASE_URL_UNPOOLED. The build creates the UI, sample data, and PostgreSQL tables. Public deployment still needs to be completed and verified in the Vercel dashboard.
 
 ## Configuration
 
@@ -58,8 +62,11 @@ The image creates the synthetic sample database at build time and runs as a non-
 | GOOGLE_API_KEY | Server-only Gemini credential |
 | MODEL_NAME | Available structured-output-capable Gemini model ID |
 | MODEL_PROVIDER | google_genai |
-| PUBLIC_ORIGIN | Exact browser origin, default http://localhost:8000 |
+| PUBLIC_ORIGIN | Exact browser origin; localhost locally, trusted Vercel hosts automatically when unset |
 | SECURE_COOKIES | true behind public HTTPS; false for local HTTP |
+| DATABASE_URL | Neon pooled URL for durable application storage; required on Vercel |
+| DATABASE_URL_UNPOOLED | Neon direct URL for checkpoints and locks; required with DATABASE_URL |
+| DATABASE_SCHEMA | PostgreSQL schema, default querycraft |
 | STATE_DIR | Separate application/checkpoint files; default .runtime |
 | SAMPLE_DB | Fixed synthetic query database; default data/sample.db |
 | DAILY_MODEL_CALLS | Persistent public-demo call ceiling, default 500 |
@@ -94,7 +101,9 @@ npm --prefix frontend run test:e2e
 .\.venv\Scripts\python.exe -m evals.run --runs 3
 ```
 
-The backend tests use real SQLite and LangGraph with a test-only scripted model. Browser tests start a dedicated test server, not the production server. The smoke test and evaluation runner use the real configured provider and incur API usage. The 60-case evaluation compares query results with hand-authored SQL oracles and varies seed data across runs. Reports go to evals/reports; do not confuse planned thresholds with measured results.
+The default backend tests use real SQLite and LangGraph with a test-only scripted model. Browser tests start a dedicated test server, not the production server. The smoke test and evaluation runner use the real configured provider and incur API usage. The 60-case evaluation compares query results with hand-authored SQL oracles and varies seed data across runs. Reports go to evals/reports; do not confuse planned thresholds with measured results.
+
+The [Vercel walkthrough](docs/deployment-vercel.md#local-postgresql-verification) also describes opt-in PostgreSQL integration tests in a disposable schema.
 
 ## How it works
 
@@ -110,12 +119,12 @@ Six synthetic tables: departments, employees, customers, products, orders, order
 
 The sample schema was missing from the assignment; the user approved this substitute. Follow-up support is treated as mandatory even though the PDF also lists it as a bonus. Index advice is prose, not executable DDL. Ambiguous dates and business metrics require clarification.
 
-Current limitations: SQLite only; single API instance/worker; no user database uploads; no raw token streaming; conservative join support; no enterprise authentication. Syntactically valid SQL can still misunderstand a business question—review explanations and the evaluation evidence.
+Current limitations: SQLite query dialect only; local file persistence requires a single API instance, while PostgreSQL persistence supports multiple instances; no user database uploads; no raw token streaming; conservative join support; no enterprise authentication. Syntactically valid SQL can still misunderstand a business question—review explanations and the evaluation evidence.
 
 ## Privacy and retention
 
-Questions, recent conversation context, and trusted schema metadata are sent to the configured Gemini model. Query result rows are not sent to the model. Conversations are stored locally/on the configured persistent disk and expire after seven days of inactivity; result data expires after one hour. The API does not log raw questions, results, or credentials. Delete a conversation from the history rail to remove its related data and checkpoints.
+Questions, recent conversation context, and trusted schema metadata are sent to the configured Gemini model. Query result rows are not sent to the model. Conversations are stored in Neon when configured, otherwise locally/on the configured persistent disk and expire after seven days of inactivity; result data expires after one hour. The API does not log raw questions, results, or credentials. Delete a conversation from the history rail to remove its related data and checkpoints.
 
 ## Submission status
 
-Public repository URL and deployed app URL require the user's external account/destination. No placeholder URL is presented as a completed deployment. The deployment configuration is prepared in render.yaml. See [delivery status](docs/delivery-status.md) and the [demo script](docs/demo-script.md) for remaining external deliverables.
+Source repository: [FDE_SQL_AI_ASSISTANT](https://github.com/VinodKondawar26/FDE_SQL_AI_ASSISTANT). Vercel configuration and Neon persistence are prepared and locally verified; the public application URL is pending dashboard deployment. Docker and Render configurations remain available. See [delivery status](docs/delivery-status.md) and the [demo script](docs/demo-script.md) for remaining external deliverables.

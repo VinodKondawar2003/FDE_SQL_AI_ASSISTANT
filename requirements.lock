@@ -28,6 +28,7 @@ langchain-google-genai==4.4.2
 langchain-protocol==0.0.20
 langgraph==1.2.16
 langgraph-checkpoint==4.3.0
+langgraph-checkpoint-postgres==3.2.0
 langgraph-checkpoint-sqlite==3.1.2
 langgraph-prebuilt==1.1.1
 langgraph-sdk==0.4.9
@@ -37,6 +38,9 @@ orjson==3.13.0
 ormsgpack==1.13.0
 packaging==26.3
 pluggy==1.7.0
+psycopg==3.3.6
+psycopg-binary==3.3.6
+psycopg-pool==3.3.3
 pyasn1==0.6.4
 pyasn1_modules==0.4.2
 pycparser==3.12
@@ -59,6 +63,7 @@ tenacity==9.1.4
 truststore==0.10.5
 typing-inspection==0.4.4
 typing_extensions==4.16.0
+tzdata==2026.5
 urllib3==2.8.0
 uuid_utils==0.18.0
 uvicorn==0.54.0

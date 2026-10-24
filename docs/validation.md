@@ -1,19 +1,20 @@
 # Local verification
 
-Verification date: 2026-10-24. Public repository publication and public hosting are deferred by the user's explicit choice.
+Verification date: 2026-10-24. GitHub is published. Vercel deployment is authorized and pending dashboard completion.
 
 ## Deterministic checks
 
 | Check | Measured result |
 | --- | --- |
-| Backend pytest | 64 passed |
+| Backend pytest | 68 passed; 4 opt-in PostgreSQL tests skipped in default run |
+| PostgreSQL integration tests against Neon | 4 passed in 159.35 seconds, isolated test schema removed |
 | Ruff | Passed |
 | Frontend component tests | 2 passed |
 | TypeScript and Vite production build | Passed |
 | Playwright desktop and 360 px mobile flows | 2 passed |
 | npm dependency audit | 0 vulnerabilities at verification time |
 
-These are 68 automated tests in total. Backend and browser integration tests use the real SQLite engine, API, and LangGraph, with a test-only scripted provider. They do not establish real-model accuracy.
+These are 76 automated tests in total, including the separate PostgreSQL run. Backend and browser integration tests use the real SQLite engine, API, and LangGraph, with a test-only scripted provider. They do not establish real-model accuracy.
 
 The tests cover SQL AST and authorizer restrictions; schema and relationship resolution; date and state-code semantics; join-removal proofs; cancellation and row caps; ownership; CSRF and origin checks; idempotency; concurrent turns; restart/checkpoint recovery; expiry; CSV handling; real browser navigation, results, follow-ups, exports, refresh, refusal, dark mode, and mobile overflow. Additional regressions ensure supplied explain queries bypass generation and retain their joins.
 
@@ -42,7 +43,7 @@ Calls in the final evaluation are spaced five seconds apart. Reported case durat
 - Documentation screenshots were captured from browser tests using the test adapter; they are UI evidence, not live-model evidence.
 - The recording script and video player are prepared, but no completed demo video exists yet. The recording command was declined during the Git handoff.
 - Docker is not installed in this workspace. Dockerfile/Compose/Render configuration is supplied, but a local container build or runtime is **not verified**. CI includes an image-build step for the future connected repository.
-- Public deployment, external URL verification, and hosted persistence testing are deferred.
+- Live Neon storage/checkpoint tests and real Gemini smoke passed locally after the PostgreSQL adaptation. Public Vercel HTTP validation remains pending.
 - Finite test coverage cannot guarantee that every natural-language request has the intended business meaning. Review generated SQL and its explanation before running it.
 
 ## Reproduce
@@ -54,3 +55,7 @@ Run the live evaluator separately from demo recording and other intensive AI use
 Warm loopback HTTP timing: 30 measured requests after 5 warmups per endpoint. Schema p95 10.31 ms; conversation list p95 12.07 ms; readiness p95 1.75 ms. See [timing evidence](local-api-timing.json).
 
 A transient HTTP-status retry regression was added after the live evaluator started: HTTP 503 is now retried once within the same call/deadline budget. The 64-test backend suite verifies it; the running live evaluator uses its previously loaded retry behavior.
+
+## Vercel/Neon adaptation verification
+
+Four real PostgreSQL tests passed: independent API instances preserve follow-up context and exports; cold starts do not interrupt another instance; conversation mutations are locked; quotas are atomic; checkpoint recovery is idempotent. Tests used a random schema and removed it afterward. The real Gemini smoke also passed against Neon (80 customers, 40 California customers, sports refusal, date clarification), then removed its test conversation. The production React build, two component tests, two browser tests, and Ruff passed again. These local results do not claim that a Vercel build or public deployment has already succeeded.
