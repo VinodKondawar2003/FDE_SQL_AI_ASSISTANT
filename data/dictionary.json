@@ -1,0 +1,22 @@
+{
+  "schema_version": "demo-v1",
+  "reference_date": "2026-10-01",
+  "currency": "USD",
+  "revenue": "SUM(order_items.quantity * order_items.unit_price_cents) for orders with status paid or shipped; divide by 100.0 for USD",
+  "average_order_value": "Eligible revenue divided by distinct eligible order count; protect division by zero",
+  "order_count": "COUNT(DISTINCT orders.order_id) when joining order_items",
+  "historical_prices": "Use order_items.unit_price_cents, never products.unit_price_cents, for order revenue",
+  "california": "customers.state = 'CA'",
+  "customers": "Includes customers with no orders unless restricted",
+  "dates": "ISO dates, UTC. Resolve relative dates using the supplied request reference date.",
+  "ambiguities": [
+    "Best customer: ask revenue or order count",
+    "Bare after January 2024: clarify the boundary; after January 2024 ends is explicitly February 1 inclusive"
+  ],
+  "state_codes": {
+    "California": "CA",
+    "New York": "NY",
+    "Texas": "TX"
+  },
+  "state_storage": "customers.state contains two-letter uppercase US state codes, never full state names"
+}

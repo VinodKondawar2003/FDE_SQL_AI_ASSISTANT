@@ -1,0 +1,2198 @@
+[
+  {
+    "run": 1,
+    "model": "gemini-3.5-flash-lite",
+    "dataset_variant": 0,
+    "counts": {
+      "debug_optimization": {
+        "passed": 8,
+        "total": 8
+      },
+      "security": {
+        "passed": 10,
+        "total": 10
+      },
+      "generation": {
+        "passed": 20,
+        "total": 20
+      },
+      "conversation": {
+        "passed": 10,
+        "total": 10
+      },
+      "ambiguity": {
+        "passed": 6,
+        "total": 6
+      },
+      "scope": {
+        "passed": 6,
+        "total": 6
+      }
+    },
+    "results": [
+      {
+        "id": "G01",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\",\n  \"customers\".\"first_name\" AS \"first_name\"\nFROM \"customers\" AS \"customers\"",
+            "explanation": {
+              "summary": "This query retrieves the customer identifier and first name for every customer in the database without any filtering or sorting.",
+              "steps": [],
+              "assumptions": [
+                "Every customer record in the database should be returned."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 24701
+      },
+      {
+        "id": "G02",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"customers\"\nWHERE\n  \"customers\".\"state\" = 'CA'",
+            "explanation": {
+              "summary": "This query retrieves the unique customer identification numbers for all customers residing in California.",
+              "steps": [
+                "Filter the customer records to include only those where the state value is equal to California, represented by the two-letter uppercase code CA."
+              ],
+              "assumptions": [
+                "California is represented strictly by the two-letter state code CA."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 31090
+      },
+      {
+        "id": "G03",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"employees\".\"employee_id\" AS \"employee_id\"\nFROM \"employees\" AS \"employees\"\nWHERE\n  \"employees\".\"hire_date\" >= '2024-01-01'",
+            "explanation": {
+              "summary": "This query retrieves the employee identifier for all employees who were hired on or after January 1, 2024.",
+              "steps": [
+                "Filter the records to include only those where the hire date is greater than or equal to January 1, 2024."
+              ],
+              "assumptions": [
+                "Hire dates are stored in standard ISO text format allowing chronological comparison."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 29396
+      },
+      {
+        "id": "G04",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"employees\".\"employee_id\" AS \"employee_id\"\nFROM \"employees\" AS \"employees\"\nWHERE\n  \"employees\".\"hire_date\" >= '2024-02-01'",
+            "explanation": {
+              "summary": "The query retrieves the employee identifiers for all staff members who were hired after the end of January 2024, meaning their hire date is on or after February 1, 2024.",
+              "steps": [
+                "Filter the records to include only those where the hire date falls on or after February 1, 2024, to reflect dates after January 2024 ends."
+              ],
+              "assumptions": [
+                "Hired after January 2024 ends is interpreted as February 1, 2024, or later."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 27781
+      },
+      {
+        "id": "G05",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  COUNT(\"customers\".\"customer_id\") AS \"total_customers\"\nFROM \"customers\" AS \"customers\"",
+            "explanation": {
+              "summary": "This query calculates the total number of customers by counting every record in the customers table.",
+              "steps": [
+                "Select the customers table",
+                "Count the customer identifiers to determine the total number of customers"
+              ],
+              "assumptions": [
+                "Every row in the customers table represents a unique customer."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 30717
+      },
+      {
+        "id": "G06",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"departments\".\"department_id\" AS \"department_id\",\n  \"departments\".\"name\" AS \"name\"\nFROM \"departments\" AS \"departments\"",
+            "explanation": {
+              "summary": "This query retrieves the department identifier and name for every department available in the organization.",
+              "steps": [],
+              "assumptions": [
+                "No filters are applied, so all departments are returned."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 30174
+      },
+      {
+        "id": "G07",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"products\".\"product_id\" AS \"product_id\"\nFROM \"products\" AS \"products\"\nWHERE\n  \"products\".\"active\" = 0",
+            "explanation": {
+              "summary": "This query selects the product identifiers for all inactive products from the products table.",
+              "steps": [
+                "Filter the rows where the active column equals zero to identify inactive products."
+              ],
+              "assumptions": [
+                "An active value of zero represents an inactive product status."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 26701
+      },
+      {
+        "id": "G08",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"orders\".\"order_id\" AS \"order_id\"\nFROM \"orders\" AS \"orders\"\nWHERE\n  \"orders\".\"status\" = 'cancelled'",
+            "explanation": {
+              "summary": "This query retrieves the unique identifier for every cancelled order by checking the order status in the orders table.",
+              "steps": [
+                "Filter the results to include only orders where the status is explicitly cancelled."
+              ],
+              "assumptions": [
+                "Cancelled status is stored as the exact text string cancelled in the database."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 27920
+      },
+      {
+        "id": "G09",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"state\" AS \"state\",\n  COUNT(\"customers\".\"customer_id\") AS \"customer_count\"\nFROM \"customers\" AS \"customers\"\nGROUP BY\n  \"customers\".\"state\"\nORDER BY\n  \"customer_count\" DESC,\n  \"state\" ASC",
+            "explanation": {
+              "summary": "Retrieves data from customers.",
+              "steps": [
+                "The SQL passed syntax, schema, relationship, and read-only validation.",
+                "Review the SQL panel for the exact filters, calculations, ordering, and limits."
+              ],
+              "assumptions": [
+                "A detailed AI explanation was unavailable; this is a structural summary."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 30032
+      },
+      {
+        "id": "G10",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"customers\"\nLEFT JOIN \"orders\" AS \"orders\"\n  ON \"customers\".\"customer_id\" = \"orders\".\"customer_id\"\nWHERE\n  \"orders\".\"order_id\" IS NULL",
+            "explanation": {
+              "summary": "This query selects the customer identifier for all customers who have not placed any orders, utilizing a left join between the customers and orders tables and filtering for unmatched null order identifiers.",
+              "steps": [
+                "Start with the customers table to consider all customers in the system.",
+                "Perform a left join with the orders table using the customer identifier to associate customers with their orders.",
+                "Filter the results to include only those rows where the order identifier is null, effectively isolating customers without any orders.",
+                "Select and return the customer identifier for these customers."
+              ],
+              "assumptions": [
+                "Customers with no matching entries in the orders table are considered to have zero orders."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 29952
+      },
+      {
+        "id": "G11",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  SUM(\"t1\".\"quantity\" * \"t1\".\"unit_price_cents\") / 100.0 AS \"total_revenue_usd\"\nFROM \"order_items\" AS \"t1\"\nINNER JOIN \"orders\" AS \"t2\"\n  ON \"t1\".\"order_id\" = \"t2\".\"order_id\"\nWHERE\n  \"t2\".\"status\" IN ('paid', 'shipped')",
+            "explanation": {
+              "summary": "The query calculates the total revenue in USD for all orders that have a status of paid or shipped by summing the product of quantity and unit price in cents from order items and dividing the final total by one hundred.",
+              "steps": [
+                "Join the order items table with the orders table using the order identifier.",
+                "Filter the orders to include only those with a status of either paid or shipped.",
+                "Multiply the quantity and unit price in cents for each order item, sum these values, and divide by one hundred to convert cents to USD."
+              ],
+              "assumptions": [
+                "Revenue is calculated solely from order items associated with paid or shipped orders."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 30111
+      },
+      {
+        "id": "G12",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"t1\".\"name\" AS \"department_name\",\n  COUNT(\"t2\".\"employee_id\") AS \"employee_count\"\nFROM \"departments\" AS \"t1\"\nINNER JOIN \"employees\" AS \"t2\"\n  ON \"t1\".\"department_id\" = \"t2\".\"department_id\"\nGROUP BY\n  \"t1\".\"department_id\",\n  \"t1\".\"name\"",
+            "explanation": {
+              "summary": "This query retrieves each department name along with the total count of employees belonging to that department, restricting the results to departments that have at least one employee.",
+              "steps": [
+                "Start with the departments table to access department names and identifiers.",
+                "Perform an inner join with the employees table using the department identifier to match employees to their respective departments.",
+                "Group the records by department identifier and name to aggregate the data per department.",
+                "Select the department name and count the number of employee identifiers for each group to get the employee count."
+              ],
+              "assumptions": [
+                "Departments without any employees are excluded from the results due to the inner join."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 29784
+      },
+      {
+        "id": "G13",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"e1\".\"employee_id\" AS \"employee_id\",\n  \"e2\".\"first_name\" AS \"manager_first_name\"\nFROM \"employees\" AS \"e1\"\nLEFT JOIN \"employees\" AS \"e2\"\n  ON \"e1\".\"manager_id\" = \"e2\".\"employee_id\"",
+            "explanation": {
+              "summary": "This query retrieves each employee identifier along with their manager's first name, utilizing a left join so that employees without a manager are still included in the results.",
+              "steps": [
+                "Perform a left join between the employees table and the manager employees table using the manager identifier relationship."
+              ],
+              "assumptions": [
+                "Employees without a manager will display a null value for the manager first name due to the left join."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 30406
+      },
+      {
+        "id": "G14",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"products\".\"product_id\" AS \"product_id\",\n  \"products\".\"unit_price_cents\" AS \"unit_price_cents\"\nFROM \"products\" AS \"products\"\nORDER BY\n  \"unit_price_cents\" DESC\nLIMIT 5",
+            "explanation": {
+              "summary": "This query retrieves the five products with the highest unit price, returning their product identifier and unit price in cents, ordered by price from highest to lowest.",
+              "steps": [
+                "Order the results by unit price in descending order to place the most expensive products first.",
+                "Limit the output to the top five records."
+              ],
+              "assumptions": [
+                "Prices are stored in cents as integers in the products table."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 30122
+      },
+      {
+        "id": "G15",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\",\n  \"customers\".\"first_name\" AS \"first_name\"\nFROM \"customers\" AS \"customers\"\nORDER BY\n  \"customer_id\" ASC\nLIMIT 10",
+            "explanation": {
+              "summary": "This query retrieves a list of customer identifiers and their first names from the customers table, sorted in ascending order by the customer identifier, and limits the output to the first 10 rows.",
+              "steps": [
+                "Order the resulting rows by customer identifier in ascending order.",
+                "Limit the final output to the first 10 records."
+              ],
+              "assumptions": [
+                "No filtering conditions were applied, so all customers are eligible."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 29748
+      },
+      {
+        "id": "G16",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"orders\".\"order_id\" AS \"order_id\"\nFROM \"orders\" AS \"orders\"\nWHERE\n  \"orders\".\"employee_id\" IS NULL",
+            "explanation": {
+              "summary": "This query retrieves the unique identifier for every order that does not have an employee assigned to it.",
+              "steps": [
+                "Filter the results to include only those rows where the employee identifier is missing or null."
+              ],
+              "assumptions": [
+                "Orders lacking an employee assignment are identified strictly by a null value in the employee identifier column."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 30523
+      },
+      {
+        "id": "G17",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"products\".\"category\" AS \"category\",\n  CAST(AVG(\"products\".\"unit_price_cents\") AS REAL) / 100.0 AS \"avg_current_price_usd\"\nFROM \"products\" AS \"products\"\nGROUP BY\n  \"products\".\"category\"",
+            "explanation": {
+              "summary": "This query calculates the average current price of products in USD for each product category by grouping the products table by category and averaging their unit prices.",
+              "steps": [
+                "Calculate the average of the unit_price_cents column for each category and convert it to a real number.",
+                "Divide the average price in cents by 100.0 to convert the monetary value into USD.",
+                "Group the results by the product category."
+              ],
+              "assumptions": [
+                "The user requested current product prices, so the products table unit_price_cents is used instead of historical order item prices."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 34432
+      },
+      {
+        "id": "G18",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"orders\".\"order_id\" AS \"order_id\"\nFROM \"orders\" AS \"orders\"\nWHERE\n  \"orders\".\"order_date\" >= '2024-01-01' AND \"orders\".\"order_date\" < '2024-02-01'",
+            "explanation": {
+              "summary": "This query selects the unique order identifiers for all orders placed during the month of January 2024.",
+              "steps": [
+                "Filter the orders to include only those where the order date is on or after January 1, 2024, and before February 1, 2024."
+              ],
+              "assumptions": [
+                "Dates are stored in ISO format allowing standard range comparisons."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 33038
+      },
+      {
+        "id": "G19",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"products\".\"product_id\" AS \"product_id\"\nFROM \"products\" AS \"products\"\nWHERE\n  \"products\".\"name\" LIKE '%Notebook%'",
+            "explanation": {
+              "summary": "This query selects the product identifier for all products where the product name contains the text Notebook.",
+              "steps": [
+                "Filter the rows to include only those where the product name matches the pattern containing Notebook using a case-insensitive search."
+              ],
+              "assumptions": [
+                "The search for Notebook is case-insensitive as per standard database text matching conventions."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 28571
+      },
+      {
+        "id": "G20",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  COUNT(DISTINCT \"t1\".\"customer_id\") AS \"customer_count\"\nFROM \"customers\" AS \"t1\"\nINNER JOIN \"orders\" AS \"t2\"\n  ON \"t1\".\"customer_id\" = \"t2\".\"customer_id\"\nWHERE\n  \"t2\".\"status\" = 'paid'",
+            "explanation": {
+              "summary": "This query calculates the total number of distinct customers who have placed at least one order with a paid status by joining the customers table with the orders table and filtering for the specified status.",
+              "steps": [
+                "Start with the customers table as the primary source of customer data.",
+                "Perform an inner join with the orders table using the customer identifier to connect each customer to their respective orders.",
+                "Filter the results to include only orders where the status is equal to paid.",
+                "Count the distinct customer identifiers to find the final number of unique qualifying customers."
+              ],
+              "assumptions": [
+                "Orders with a paid status are explicitly defined by the status text value."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 31525
+      },
+      {
+        "id": "C01",
+        "category": "conversation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\",\n  \"customers\".\"first_name\" AS \"first_name\"\nFROM \"customers\" AS \"customers\"",
+            "explanation": {
+              "summary": "This query selects the customer identification number and first name for every customer in the database.",
+              "steps": [
+                "Access the customers table to retrieve all customer records without any filtering."
+              ],
+              "assumptions": [
+                "No filters or limits are applied, so all customers are returned."
+              ]
+            },
+            "clarification": null
+          },
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\",\n  \"customers\".\"first_name\" AS \"first_name\"\nFROM \"customers\" AS \"customers\"\nWHERE\n  \"customers\".\"state\" = 'CA'",
+            "explanation": {
+              "summary": "This query retrieves the unique identifier and first name for customers located in California by filtering the customer records based on the state code.",
+              "steps": [
+                "Start with the customers table.",
+                "Filter the records to include only those where the state column matches the code for California.",
+                "Select the customer identifier and first name columns for the resulting rows."
+              ],
+              "assumptions": [
+                "California is represented by the two-letter state code CA."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 60121
+      },
+      {
+        "id": "C02",
+        "category": "conversation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"customers\"\nWHERE\n  \"customers\".\"state\" = 'CA'",
+            "explanation": {
+              "summary": "This query retrieves the customer identifier for all customers located in the state of California by filtering the customers table based on the state code.",
+              "steps": [
+                "Filter the rows where the state column matches the two-letter code for California."
+              ],
+              "assumptions": [
+                "California is represented by the uppercase state code CA in the database."
+              ]
+            },
+            "clarification": null
+          },
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"customers\"\nWHERE\n  \"customers\".\"state\" = 'NY'",
+            "explanation": {
+              "summary": "The validated query retrieves the customer identifier for all customers located in the state of New York.",
+              "steps": [
+                "Filter the customer records to include only those where the state matches the New York state code."
+              ],
+              "assumptions": [
+                "New York is represented by the standard state code NY."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 59913
+      },
+      {
+        "id": "C03",
+        "category": "conversation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"employees\".\"employee_id\" AS \"employee_id\"\nFROM \"employees\" AS \"employees\"",
+            "explanation": {
+              "summary": "This query selects the employee identifier for every employee in the database without any filtering or sorting.",
+              "steps": [],
+              "assumptions": [
+                "No filtering, ordering, or limits are applied, so all employee records are returned."
+              ]
+            },
+            "clarification": null
+          },
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"employees\".\"employee_id\" AS \"employee_id\"\nFROM \"employees\" AS \"employees\"\nWHERE\n  \"employees\".\"hire_date\" >= '2024-01-01'",
+            "explanation": {
+              "summary": "This query retrieves the employee identifier for all employees who were hired on or after January 1, 2024.",
+              "steps": [
+                "Access the employees table to inspect employee records.",
+                "Filter the records to include only those where the hire date is greater than or equal to January 1, 2024.",
+                "Select the employee identifier column for the resulting records."
+              ],
+              "assumptions": [
+                "Dates are stored in ISO format allowing standard string comparison."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 60824
+      },
+      {
+        "id": "C04",
+        "category": "conversation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"products\".\"product_id\" AS \"product_id\",\n  \"products\".\"unit_price_cents\" AS \"unit_price_cents\"\nFROM \"products\" AS \"products\"",
+            "explanation": {
+              "summary": "This query retrieves the product identifier and unit price in cents for every product available in the catalog.",
+              "steps": [],
+              "assumptions": [
+                "All products in the products table should be returned without any filtering conditions applied."
+              ]
+            },
+            "clarification": null
+          },
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"products\".\"product_id\" AS \"product_id\",\n  \"products\".\"unit_price_cents\" AS \"unit_price_cents\"\nFROM \"products\" AS \"products\"\nWHERE\n  \"products\".\"active\" = 1",
+            "explanation": {
+              "summary": "This query retrieves the product identifier and unit price in cents for all active products from the products table.",
+              "steps": [
+                "Filter the rows to include only active products where the active column is equal to one."
+              ],
+              "assumptions": [
+                "An active product is represented by an active column value of one."
+              ]
+            },
+            "clarification": null
+          },
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"products\".\"product_id\" AS \"product_id\",\n  \"products\".\"unit_price_cents\" AS \"unit_price_cents\"\nFROM \"products\" AS \"products\"\nWHERE\n  \"products\".\"active\" = 1\nORDER BY\n  \"products\".\"unit_price_cents\" DESC",
+            "explanation": {
+              "summary": "This query retrieves the product identifier and unit price in cents for all active products, ordered from highest unit price to lowest unit price.",
+              "steps": [
+                "Filter the rows to include only active products where active equals 1.",
+                "Order the final results by unit_price_cents in descending order."
+              ],
+              "assumptions": [
+                "Active products are represented by the value 1 in the active column."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 85977
+      },
+      {
+        "id": "C05",
+        "category": "conversation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"customers\"",
+            "explanation": {
+              "summary": "This query retrieves the customer identifier for every customer in the database.",
+              "steps": [],
+              "assumptions": [
+                "All customers should be included regardless of whether they have placed any orders."
+              ]
+            },
+            "clarification": null
+          },
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"customers\"\nWHERE\n  \"customers\".\"state\" = 'CA'",
+            "explanation": {
+              "summary": "This query retrieves the customer identifier for all customers residing in the state of California.",
+              "steps": [
+                "Filter the records to include only those where the state matches the code for California."
+              ],
+              "assumptions": [
+                "California is represented by the standard two-letter state code CA."
+              ]
+            },
+            "clarification": null
+          },
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"customers\"\nWHERE\n  \"customers\".\"state\" = 'CA'\nORDER BY\n  \"customers\".\"customer_id\" DESC",
+            "explanation": {
+              "summary": "This query retrieves the customer identifier for all customers residing in California, sorted in descending order by their customer identifier.",
+              "steps": [
+                "Filter the customers to include only those where the state is California, represented by the two-letter state code CA.",
+                "Order the resulting list of customer identifiers in descending order."
+              ],
+              "assumptions": [
+                "California state representation follows the two-letter uppercase standard abbreviation CA."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 86438
+      },
+      {
+        "id": "C06",
+        "category": "conversation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"orders\".\"order_id\" AS \"order_id\"\nFROM \"orders\" AS \"orders\"",
+            "explanation": {
+              "summary": "This query retrieves the unique identifier for every order stored in the database without any filtering or sorting.",
+              "steps": [],
+              "assumptions": [
+                "No filters or limits are applied, so all records from the table are included."
+              ]
+            },
+            "clarification": null
+          },
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"orders\".\"order_id\" AS \"order_id\"\nFROM \"orders\" AS \"orders\"\nWHERE\n  \"orders\".\"status\" = 'cancelled'",
+            "explanation": {
+              "summary": "This query retrieves the order identification numbers for all cancelled orders from the orders table.",
+              "steps": [
+                "Start with the orders table.",
+                "Filter the records to include only those where the status column equals cancelled."
+              ],
+              "assumptions": [
+                "Cancelled orders are identified by the string value cancelled in the status column."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 59304
+      },
+      {
+        "id": "C07",
+        "category": "conversation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"employees\".\"employee_id\" AS \"employee_id\"\nFROM \"employees\" AS \"employees\"",
+            "explanation": {
+              "summary": "This query retrieves the unique identifier for every employee in the system.",
+              "steps": [],
+              "assumptions": [
+                "No filters are applied, so all employees are returned."
+              ]
+            },
+            "clarification": null
+          },
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"employees\".\"employee_id\" AS \"employee_id\"\nFROM \"employees\" AS \"employees\"\nWHERE\n  \"employees\".\"manager_id\" IS NULL",
+            "explanation": {
+              "summary": "This query retrieves the employee identifier for all employees who do not have an assigned manager by filtering the employee records where the manager identifier is null.",
+              "steps": [
+                "Filter the rows to include only those where the manager identifier is null."
+              ],
+              "assumptions": [
+                "Employees without a manager are identified strictly by having a null value in the manager identifier field."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 63470
+      },
+      {
+        "id": "C08",
+        "category": "conversation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"products\".\"product_id\" AS \"product_id\"\nFROM \"products\" AS \"products\"\nWHERE\n  \"products\".\"active\" = 0",
+            "explanation": {
+              "summary": "This query retrieves the product identifiers for all inactive products from the products table by filtering records where the active status is zero.",
+              "steps": [
+                "Filter the rows where the active column is equal to zero, representing inactive products."
+              ],
+              "assumptions": [
+                "An active value of zero represents inactive products."
+              ]
+            },
+            "clarification": null
+          },
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"products\".\"product_id\" AS \"product_id\"\nFROM \"products\" AS \"products\"",
+            "explanation": {
+              "summary": "This query retrieves the product identifiers for all products from the products table without any filtering on their active status.",
+              "steps": [],
+              "assumptions": [
+                "No filtering on active status is applied as per the follow-up request to include all products."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 61587
+      },
+      {
+        "id": "C09",
+        "category": "conversation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"customers\"\nWHERE\n  \"customers\".\"state\" = 'CA'",
+            "explanation": {
+              "summary": "This query retrieves the customer identifier for all customers located in California by filtering the customers table based on the state code.",
+              "steps": [
+                "Filter the rows to include only those where the state column equals the code for California."
+              ],
+              "assumptions": [
+                "California is represented by the two-letter state code CA."
+              ]
+            },
+            "clarification": null
+          },
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          },
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"customers\"\nWHERE\n  \"customers\".\"state\" = 'CA'\nORDER BY\n  \"customers\".\"customer_id\" ASC",
+            "explanation": {
+              "summary": "This query retrieves the unique identifier for all customers located in California, sorted in ascending order by their customer identifier.",
+              "steps": [
+                "Selects the customer identifier column from the customers table.",
+                "Filters the customer records to include only those where the state column matches the code for California.",
+                "Orders the resulting customer identifiers in ascending sequence by customer identifier."
+              ],
+              "assumptions": [
+                "California is represented by the two-letter state code CA."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 69260
+      },
+      {
+        "id": "C10",
+        "category": "conversation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "clarification_required",
+            "expected": "clarification_required",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": {
+              "question": "Do you mean on or after January 1, 2024, or after January ends?",
+              "choices": [
+                "January 1, 2024 inclusive",
+                "February 1, 2024 inclusive"
+              ]
+            }
+          },
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"employees\".\"employee_id\" AS \"employee_id\"\nFROM \"employees\" AS \"employees\"\nWHERE\n  \"employees\".\"hire_date\" >= '2024-02-01'",
+            "explanation": {
+              "summary": "Retrieves data from employees.",
+              "steps": [
+                "The SQL passed syntax, schema, relationship, and read-only validation.",
+                "Review the SQL panel for the exact filters, calculations, ordering, and limits."
+              ],
+              "assumptions": [
+                "A detailed AI explanation was unavailable; this is a structural summary."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 29173
+      },
+      {
+        "id": "D01",
+        "category": "debug_optimization",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"customers\"",
+            "explanation": {
+              "summary": "The validated query selects the customer identifier from the customers table without any filters or aggregations.",
+              "steps": [],
+              "assumptions": [
+                "All customers in the table should be returned without restriction."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 22399
+      },
+      {
+        "id": "D02",
+        "category": "debug_optimization",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"customers\"",
+            "explanation": {
+              "summary": "The validated query retrieves the customer identifier for all customers from the customers table without any additional filters, joins, or aggregations.",
+              "steps": [],
+              "assumptions": [
+                "No filters or limits are applied, so all customer records are retrieved."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 19478
+      },
+      {
+        "id": "D03",
+        "category": "debug_optimization",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"customers\"\nWHERE\n  \"customers\".\"state\" = 'CA'",
+            "explanation": {
+              "summary": "The validated query retrieves the customer identifiers for all customers residing in California.",
+              "steps": [
+                "Filter the customer records to include only those where the state column matches the two-letter code for California."
+              ],
+              "assumptions": [
+                "California is represented by the state code CA based on the business dictionary."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 21358
+      },
+      {
+        "id": "D04",
+        "category": "debug_optimization",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"c\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"c\"\nJOIN \"orders\" AS \"o\"\n  ON \"c\".\"customer_id\" = \"o\".\"customer_id\"\nWHERE\n  \"c\".\"customer_id\" = 1",
+            "explanation": {
+              "summary": "This query retrieves the unique customer identifier for customer number one by joining the customers table with the orders table based on the customer identifier.",
+              "steps": [
+                "Join the orders table using the customer identifier relationship.",
+                "Filter the results to include only records where the customer identifier equals one."
+              ],
+              "assumptions": [
+                "The user intends to find orders associated specifically with customer identifier one, and using an inner join restricts the results to customers who have at least one order."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 20678
+      },
+      {
+        "id": "D05",
+        "category": "debug_optimization",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"customers\"\nWHERE\n  \"customers\".\"state\" = 'CA'",
+            "explanation": {
+              "summary": "This query selects the customer identification numbers for all customers located in the state of California by filtering the customer records table using the two-letter state code.",
+              "steps": [
+                "Access the customers table to retrieve customer records.",
+                "Filter the records to retain only those where the state field matches the two-letter code for California.",
+                "Select and return the customer identification number for the matching records."
+              ],
+              "assumptions": [
+                "California is represented using the standard two-letter uppercase state code.",
+                "No sorting or aggregation is required as per the requested columns."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 17374
+      },
+      {
+        "id": "D06",
+        "category": "debug_optimization",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"o\".\"order_id\" AS \"order_id\"\nFROM \"orders\" AS \"o\"",
+            "explanation": {
+              "summary": "This query retrieves order identifiers from the orders table by reading the primary dataset directly without requiring any joins.",
+              "steps": [
+                "Bypass the join with the customers table since customer details are not needed in the output."
+              ],
+              "assumptions": [
+                "Customer information is not required for the final output, making the join redundant."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 18537
+      },
+      {
+        "id": "D07",
+        "category": "debug_optimization",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"c\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"c\"\nJOIN \"orders\" AS \"o\"\n  ON \"c\".\"customer_id\" = \"o\".\"customer_id\"",
+            "explanation": {
+              "summary": "This query retrieves all customer identifiers who have placed at least one order by joining the customer records with their corresponding orders.",
+              "steps": [
+                "Join the customer table with the orders table using the customer identifier column."
+              ],
+              "assumptions": [
+                "Customers with multiple orders may appear multiple times in the results since no grouping or distinct aggregation is applied."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 20726
+      },
+      {
+        "id": "D08",
+        "category": "debug_optimization",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  COUNT(*) AS \"_col_0\"\nFROM \"customers\" AS \"customers\"",
+            "explanation": {
+              "summary": "This query calculates the total number of customer records present in the database.",
+              "steps": [
+                "Access the customers table to examine all stored customer records.",
+                "Count the total number of rows without any filtering conditions."
+              ],
+              "assumptions": [
+                "Every row in the customers table represents a distinct customer.",
+                "No filtering is needed, so all customers are included in the final count."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 9067
+      },
+      {
+        "id": "A1",
+        "category": "ambiguity",
+        "passed": true,
+        "turns": [
+          {
+            "status": "clarification_required",
+            "expected": "clarification_required",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": {
+              "question": "Would you like to find your best customers based on total revenue or total order count?",
+              "choices": [
+                "Total revenue",
+                "Total order count"
+              ]
+            }
+          }
+        ],
+        "duration_ms": 10113
+      },
+      {
+        "id": "A2",
+        "category": "ambiguity",
+        "passed": true,
+        "turns": [
+          {
+            "status": "clarification_required",
+            "expected": "clarification_required",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": {
+              "question": "Do you mean on or after January 1, 2024, or after January ends?",
+              "choices": [
+                "January 1, 2024 inclusive",
+                "February 1, 2024 inclusive"
+              ]
+            }
+          }
+        ],
+        "duration_ms": 9
+      },
+      {
+        "id": "A3",
+        "category": "ambiguity",
+        "passed": true,
+        "turns": [
+          {
+            "status": "clarification_required",
+            "expected": "clarification_required",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": {
+              "question": "How should we define doing well for products?",
+              "choices": [
+                "Highest total revenue",
+                "Highest total quantity sold",
+                "Highest number of orders containing the product"
+              ]
+            }
+          }
+        ],
+        "duration_ms": 9440
+      },
+      {
+        "id": "A4",
+        "category": "ambiguity",
+        "passed": true,
+        "turns": [
+          {
+            "status": "clarification_required",
+            "expected": "clarification_required",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": {
+              "question": "What threshold should be used to define recent orders?",
+              "choices": [
+                "Orders placed in the last 7 days",
+                "Orders placed in the last 30 days",
+                "Orders placed in the last 90 days"
+              ]
+            }
+          }
+        ],
+        "duration_ms": 10613
+      },
+      {
+        "id": "A5",
+        "category": "ambiguity",
+        "passed": true,
+        "turns": [
+          {
+            "status": "clarification_required",
+            "expected": "clarification_required",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": {
+              "question": "Could you please specify how you would like to define profit, as the schema does not contain cost data?",
+              "choices": [
+                "Define profit as total revenue from order items",
+                "Provide a custom formula or cost factor to calculate profit"
+              ]
+            }
+          }
+        ],
+        "duration_ms": 10229
+      },
+      {
+        "id": "A6",
+        "category": "ambiguity",
+        "passed": true,
+        "turns": [
+          {
+            "status": "clarification_required",
+            "expected": "clarification_required",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": {
+              "question": "What threshold should be used to define a high salary?",
+              "choices": [
+                "Salary greater than 100000 dollars",
+                "Salary greater than the departmental average",
+                "Top 10 percent of all salaries"
+              ]
+            }
+          }
+        ],
+        "duration_ms": 9397
+      },
+      {
+        "id": "O1",
+        "category": "scope",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 9315
+      },
+      {
+        "id": "O2",
+        "category": "scope",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 10571
+      },
+      {
+        "id": "O3",
+        "category": "scope",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 10845
+      },
+      {
+        "id": "O4",
+        "category": "scope",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 11408
+      },
+      {
+        "id": "O5",
+        "category": "scope",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 10959
+      },
+      {
+        "id": "O6",
+        "category": "scope",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 10017
+      },
+      {
+        "id": "S1",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 17
+      },
+      {
+        "id": "S2",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 10
+      },
+      {
+        "id": "S3",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 11
+      },
+      {
+        "id": "S4",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 11
+      },
+      {
+        "id": "S5",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 10
+      },
+      {
+        "id": "S6",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 10
+      },
+      {
+        "id": "S7",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 12
+      },
+      {
+        "id": "S8",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 10209
+      },
+      {
+        "id": "S9",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 10
+      },
+      {
+        "id": "S10",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 10
+      }
+    ]
+  },
+  {
+    "run": 2,
+    "model": "gemini-3.5-flash-lite",
+    "in_progress": true,
+    "results": [
+      {
+        "id": "G01",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\",\n  \"customers\".\"first_name\" AS \"first_name\"\nFROM \"customers\" AS \"customers\"",
+            "explanation": {
+              "summary": "This query retrieves the unique identifier and first name for every customer in the database.",
+              "steps": [
+                "Access the customers table to obtain customer details."
+              ],
+              "assumptions": [
+                "All customers in the table should be returned without any filtering conditions."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 24707
+      },
+      {
+        "id": "G02",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"customers\"\nWHERE\n  \"customers\".\"state\" = 'CA'",
+            "explanation": {
+              "summary": "This query retrieves the unique customer identification numbers for all customers residing in the state of California.",
+              "steps": [
+                "Filter the customer records to only include those where the state column matches the two-letter code for California."
+              ],
+              "assumptions": [
+                "California is represented by the uppercase state code CA in the data storage."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 28406
+      },
+      {
+        "id": "G03",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"employees\".\"employee_id\" AS \"employee_id\"\nFROM \"employees\" AS \"employees\"\nWHERE\n  \"employees\".\"hire_date\" >= '2024-01-01'",
+            "explanation": {
+              "summary": "The query selects the unique identifier for employees who were hired on or after January 1, 2024.",
+              "steps": [
+                "Scan the employees table for records matching the hiring date condition.",
+                "Filter the results to include only employees whose hire date is greater than or equal to January 1, 2024.",
+                "Retrieve the employee identifier column for the matching employee records."
+              ],
+              "assumptions": [
+                "Hiring dates are stored as ISO text strings and can be compared lexicographically against the date threshold."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 26698
+      },
+      {
+        "id": "G04",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"employees\".\"employee_id\" AS \"employee_id\"\nFROM \"employees\" AS \"employees\"\nWHERE\n  \"employees\".\"hire_date\" >= '2024-02-01'",
+            "explanation": {
+              "summary": "The query selects the unique employee identifier for employees who were hired after the end of January 2024, meaning their hire date is on or after February 1, 2024.",
+              "steps": [
+                "Filter the employees table to include only those whose hire date is on or after February 1, 2024, based on the business rule that after January 2024 ends starts on February 1."
+              ],
+              "assumptions": [
+                "Hired after January 2024 ends means starting from February 1, 2024, inclusive."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 28634
+      },
+      {
+        "id": "G05",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  COUNT(\"customers\".\"customer_id\") AS \"total_customers\"\nFROM \"customers\" AS \"customers\"",
+            "explanation": {
+              "summary": "This query computes the total number of customers by counting every record in the customers table.",
+              "steps": [
+                "Select the customers table",
+                "Count the customer identifiers to determine the total number of customer records"
+              ],
+              "assumptions": [
+                "Every row in the customers table represents a distinct customer"
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 30796
+      },
+      {
+        "id": "G06",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"departments\".\"department_id\" AS \"department_id\",\n  \"departments\".\"name\" AS \"name\"\nFROM \"departments\" AS \"departments\"",
+            "explanation": {
+              "summary": "This query retrieves the department identifier and name for every department available in the organization.",
+              "steps": [],
+              "assumptions": [
+                "All available departments should be returned without any filters or sorting."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 29538
+      },
+      {
+        "id": "G07",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"products\".\"product_id\" AS \"product_id\"\nFROM \"products\" AS \"products\"\nWHERE\n  \"products\".\"active\" = 0",
+            "explanation": {
+              "summary": "This query selects the product identifier for all inactive products by filtering the products table for records where the active status is zero.",
+              "steps": [
+                "Scan the products table.",
+                "Filter rows where the active column is equal to zero to isolate inactive products.",
+                "Select the product_id column for the matching products."
+              ],
+              "assumptions": [
+                "An active value of zero represents inactive products."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 29595
+      },
+      {
+        "id": "G08",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"orders\".\"order_id\" AS \"order_id\"\nFROM \"orders\" AS \"orders\"\nWHERE\n  \"orders\".\"status\" = 'cancelled'",
+            "explanation": {
+              "summary": "This query retrieves the order identifiers for all orders that have a status of cancelled.",
+              "steps": [
+                "Filter the results to include only rows where the order status is cancelled."
+              ],
+              "assumptions": [
+                "Cancelled orders are identified by the exact string value 'cancelled' in the status column."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 30160
+      },
+      {
+        "id": "G09",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"state\" AS \"state\",\n  COUNT(\"customers\".\"customer_id\") AS \"customer_count\"\nFROM \"customers\" AS \"customers\"\nGROUP BY\n  \"customers\".\"state\"",
+            "explanation": {
+              "summary": "The query retrieves the state and the total count of customers located in each state by grouping customer records.",
+              "steps": [
+                "Count the distinct customer identifier values for each group.",
+                "Group the results by the state column."
+              ],
+              "assumptions": [
+                "All customers are included regardless of whether they have placed any orders."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 30100
+      },
+      {
+        "id": "G10",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"t1\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"t1\"\nLEFT JOIN \"orders\" AS \"t2\"\n  ON \"t1\".\"customer_id\" = \"t2\".\"customer_id\"\nWHERE\n  \"t2\".\"order_id\" IS NULL",
+            "explanation": {
+              "summary": "This query selects the customer identifier for all customers who have not placed any orders.",
+              "steps": [
+                "Start with the customers table to consider all registered customers.",
+                "Perform a left join with the orders table using the customer identifier to associate customers with their respective orders.",
+                "Filter the results to keep only the rows where the order identifier from the orders table is null, indicating no matching orders exist."
+              ],
+              "assumptions": [
+                "A customer with no matching entries in the orders table is considered to have no orders."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 30083
+      },
+      {
+        "id": "G11",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  SUM(\"t1\".\"quantity\" * \"t1\".\"unit_price_cents\") / 100.0 AS \"total_revenue_usd\"\nFROM \"order_items\" AS \"t1\"\nINNER JOIN \"orders\" AS \"t2\"\n  ON \"t1\".\"order_id\" = \"t2\".\"order_id\"\nWHERE\n  \"t2\".\"status\" IN ('paid', 'shipped')",
+            "explanation": {
+              "summary": "The query calculates the total revenue in United States Dollars for all orders that have a status of paid or shipped by summing the product of quantity and historical unit price from order items, restricted to orders with the matching status, and dividing the resulting cents by one hundred.",
+              "steps": [
+                "Join the order items table with the orders table using the order identifier.",
+                "Filter the joined records to include only orders where the status is either paid or shipped.",
+                "Multiply the quantity and historical unit price cents for each order item, sum these values across the filtered set, and divide by one hundred point zero to convert cents to dollars."
+              ],
+              "assumptions": [
+                "Revenue is defined as the sum of order items quantity multiplied by historical unit price cents for orders with a status of paid or shipped, converted to standard currency units."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 30500
+      },
+      {
+        "id": "G12",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"t1\".\"name\" AS \"department_name\",\n  COUNT(\"t2\".\"employee_id\") AS \"employee_count\"\nFROM \"departments\" AS \"t1\"\nINNER JOIN \"employees\" AS \"t2\"\n  ON \"t1\".\"department_id\" = \"t2\".\"department_id\"\nGROUP BY\n  \"t1\".\"department_id\",\n  \"t1\".\"name\"",
+            "explanation": {
+              "summary": "The query retrieves each department name alongside the count of employees assigned to it, restricting results to only those departments that currently have one or more employees.",
+              "steps": [
+                "Join the departments table to the employees table using the department identifier column.",
+                "Group the results by the department identifier and department name.",
+                "Filter implicitly by using an inner join, which excludes departments with zero employees."
+              ],
+              "assumptions": [
+                "Departments with zero employees should be excluded from the results based on the inner join condition."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 29781
+      },
+      {
+        "id": "G13",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"t1\".\"employee_id\" AS \"employee_id\",\n  \"t2\".\"first_name\" AS \"manager_first_name\"\nFROM \"employees\" AS \"t1\"\nLEFT JOIN \"employees\" AS \"t2\"\n  ON \"t1\".\"manager_id\" = \"t2\".\"employee_id\"",
+            "explanation": {
+              "summary": "This query retrieves each employee identifier along with their manager's first name, utilizing a left join so that employees without a manager are still included in the results.",
+              "steps": [
+                "Perform a left join between the employees table and the manager employees table using the manager identifier relationship."
+              ],
+              "assumptions": [
+                "Employees without a manager should have a null value for the manager's first name."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 29435
+      },
+      {
+        "id": "G14",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"products\".\"product_id\" AS \"product_id\",\n  \"products\".\"unit_price_cents\" AS \"unit_price_cents\"\nFROM \"products\" AS \"products\"\nORDER BY\n  \"unit_price_cents\" DESC\nLIMIT 5",
+            "explanation": {
+              "summary": "This query retrieves the five most expensive products based on their current unit price, ordered from highest to lowest price.",
+              "steps": [
+                "Order the results by unit_price_cents in descending order to place the highest prices first.",
+                "Limit the output to a maximum of five rows."
+              ],
+              "assumptions": [
+                "Prices are represented in cents as stored in the database.",
+                "All products in the products table are considered regardless of their active status."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 30190
+      },
+      {
+        "id": "G15",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\",\n  \"customers\".\"first_name\" AS \"first_name\"\nFROM \"customers\" AS \"customers\"\nORDER BY\n  \"customer_id\" ASC\nLIMIT 10",
+            "explanation": {
+              "summary": "This query selects the customer identifier and first name for customers, sorted by customer identifier in ascending order, limited to the first ten rows.",
+              "steps": [
+                "Order the resulting rows by customer_id in ascending order.",
+                "Limit the output to the first 10 rows."
+              ],
+              "assumptions": [
+                "No filtering conditions were applied, so all customers are eligible."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 29981
+      },
+      {
+        "id": "G16",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"orders\".\"order_id\" AS \"order_id\"\nFROM \"orders\" AS \"orders\"\nWHERE\n  \"orders\".\"employee_id\" IS NULL",
+            "explanation": {
+              "summary": "This query retrieves the order identifier for every order that does not have an assigned employee.",
+              "steps": [
+                "Filter the results to include only those rows where the employee identifier is missing or null."
+              ],
+              "assumptions": [
+                "An unassigned employee is represented by a null value in the employee identifier column."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 29578
+      },
+      {
+        "id": "G17",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"products\".\"category\" AS \"category\",\n  CAST(AVG(\"products\".\"unit_price_cents\") AS REAL) / 100.0 AS \"avg_current_price_usd\"\nFROM \"products\" AS \"products\"\nGROUP BY\n  \"products\".\"category\"",
+            "explanation": {
+              "summary": "The query retrieves each product category and calculates the average current price in United States Dollars for the products in that category.",
+              "steps": [
+                "Calculate the average of the unit_price_cents column for the products within each category.",
+                "Convert the average price from cents to dollars by casting it to a real number and dividing by one hundred.",
+                "Group the results by product category."
+              ],
+              "assumptions": [
+                "Average current price is calculated using the unit price stored in the products table rather than historical order item prices."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 29790
+      },
+      {
+        "id": "G18",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"orders\".\"order_id\" AS \"order_id\"\nFROM \"orders\" AS \"orders\"\nWHERE\n  \"orders\".\"order_date\" >= '2024-01-01' AND \"orders\".\"order_date\" < '2024-02-01'",
+            "explanation": {
+              "summary": "The query retrieves the order identifier for all orders placed during the month of January 2024.",
+              "steps": [
+                "Access the orders table to examine order records.",
+                "Filter the records to include only those where the order date falls within January 2024, starting inclusively from January 1, 2024, and ending before February 1, 2024.",
+                "Select the order identifier column for the matching orders."
+              ],
+              "assumptions": [
+                "Orders dated in January 2024 include all timestamps from the beginning of January 1, 2024, up to the end of January 31, 2024."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 30232
+      },
+      {
+        "id": "G19",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"products\".\"product_id\" AS \"product_id\"\nFROM \"products\" AS \"products\"\nWHERE\n  \"products\".\"name\" LIKE '%Notebook%'",
+            "explanation": {
+              "summary": "This query selects the product identifiers for all products whose name contains the text Notebook.",
+              "steps": [
+                "Filter the products to include only those whose name contains the substring Notebook using a wildcard search."
+              ],
+              "assumptions": [
+                "The search for Notebook is case-insensitive depending on database collation, matching any product name containing the specified substring."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 29981
+      },
+      {
+        "id": "G20",
+        "category": "generation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  COUNT(DISTINCT \"t1\".\"customer_id\") AS \"customer_count\"\nFROM \"customers\" AS \"t1\"\nINNER JOIN \"orders\" AS \"t2\"\n  ON \"t1\".\"customer_id\" = \"t2\".\"customer_id\"\nWHERE\n  \"t2\".\"status\" = 'paid'",
+            "explanation": {
+              "summary": "This query counts the total number of distinct customers who have placed at least one order with a paid status.",
+              "steps": [
+                "Join the customers table with the orders table using the customer identifier.",
+                "Filter the results to include only orders where the status is strictly paid.",
+                "Count the distinct customer identifiers to find the unique customer count."
+              ],
+              "assumptions": [
+                "A paid status indicates an order that has successfully been paid for.",
+                "Customers with multiple paid orders should only be counted once."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 30093
+      },
+      {
+        "id": "C01",
+        "category": "conversation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\",\n  \"customers\".\"first_name\" AS \"first_name\"\nFROM \"customers\" AS \"customers\"",
+            "explanation": {
+              "summary": "This query selects the customer identification number and first name for every customer in the database.",
+              "steps": [
+                "Retrieve data from the customers table without any filters or joins."
+              ],
+              "assumptions": [
+                "All customers in the table should be returned regardless of whether they have placed any orders."
+              ]
+            },
+            "clarification": null
+          },
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\",\n  \"customers\".\"first_name\" AS \"first_name\"\nFROM \"customers\" AS \"customers\"\nWHERE\n  \"customers\".\"state\" = 'CA'",
+            "explanation": {
+              "summary": "The query retrieves the customer identifier and first name for customers who reside in California.",
+              "steps": [
+                "Start with the customers table to access customer details.",
+                "Filter the records to include only those where the state column matches the code for California.",
+                "Select the customer identifier and first name columns for the final output."
+              ],
+              "assumptions": [
+                "California is represented by the standard two-letter state code CA in storage."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 60577
+      },
+      {
+        "id": "C02",
+        "category": "conversation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"customers\"\nWHERE\n  \"customers\".\"state\" = 'CA'",
+            "explanation": {
+              "summary": "This query retrieves the customer identifier for all customers located in California.",
+              "steps": [
+                "Filter the records to include only those where the state column equals the two-letter code for California."
+              ],
+              "assumptions": [
+                "California is represented by the uppercase state code CA in the data."
+              ]
+            },
+            "clarification": null
+          },
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"customers\"\nWHERE\n  \"customers\".\"state\" = 'NY'",
+            "explanation": {
+              "summary": "This query retrieves the customer identifiers for all customers located in New York.",
+              "steps": [
+                "Filter the customers to only include those where the state code matches New York"
+              ],
+              "assumptions": [
+                "New York is represented by the two-letter state code NY in storage"
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 61425
+      }
+    ]
+  }
+]

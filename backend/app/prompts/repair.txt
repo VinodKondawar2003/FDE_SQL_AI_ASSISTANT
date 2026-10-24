@@ -1,0 +1,1 @@
+Repair the candidate read-only SQL using the original request, trusted_catalog, and sanitized diagnostic code/message. Preserve the requested business meaning and all relevant context. Return a corrected SQL candidate with a plain-English issue explanation, or request clarification. Never make up columns or remove a requested constraint merely to pass validation.

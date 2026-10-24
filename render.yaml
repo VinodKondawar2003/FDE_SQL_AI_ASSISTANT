@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: querycraft
+    runtime: docker
+    plan: starter
+    healthCheckPath: /api/v1/health/live
+    envVars:
+      - key: GOOGLE_API_KEY
+        sync: false
+      - key: MODEL_NAME
+        value: gemini-3.5-flash-lite
+      - key: MODEL_PROVIDER
+        value: google_genai
+      - key: PUBLIC_ORIGIN
+        sync: false
+      - key: SECURE_COOKIES
+        value: "true"
+      - key: STATE_DIR
+        value: /var/data
+      - key: SAMPLE_DB
+        value: /app/data/sample.db
+      - key: DAILY_MODEL_CALLS
+        value: "500"
+    disk:
+      name: querycraft-state
+      mountPath: /var/data
+      sizeGB: 1

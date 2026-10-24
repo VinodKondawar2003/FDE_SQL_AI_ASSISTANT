@@ -1,0 +1,20 @@
+{
+  "method": "Loopback HTTP, 5 warmups and 30 measured requests per endpoint, existing local server; no model calls",
+  "results": {
+    "/api/v1/schema": {
+      "samples": 30,
+      "median_ms": 9.11,
+      "p95_ms": 10.31
+    },
+    "/api/v1/conversations": {
+      "samples": 30,
+      "median_ms": 10.83,
+      "p95_ms": 12.07
+    },
+    "/api/v1/health/ready": {
+      "samples": 30,
+      "median_ms": 1.41,
+      "p95_ms": 1.75
+    }
+  }
+}

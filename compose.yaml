@@ -1,0 +1,16 @@
+services:
+  querycraft:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file: .env
+    environment:
+      STATE_DIR: /var/data
+      SAMPLE_DB: /app/data/sample.db
+      PUBLIC_ORIGIN: http://localhost:8000
+      SECURE_COOKIES: "false"
+    volumes:
+      - querycraft-state:/var/data
+    restart: unless-stopped
+volumes:
+  querycraft-state:
