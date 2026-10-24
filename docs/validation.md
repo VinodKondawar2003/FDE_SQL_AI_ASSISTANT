@@ -59,3 +59,11 @@ A transient HTTP-status retry regression was added after the live evaluator star
 ## Vercel/Neon adaptation verification
 
 Four real PostgreSQL tests passed: independent API instances preserve follow-up context and exports; cold starts do not interrupt another instance; conversation mutations are locked; quotas are atomic; checkpoint recovery is idempotent. Tests used a random schema and removed it afterward. The real Gemini smoke also passed against Neon (80 customers, 40 California customers, sports refusal, date clarification), then removed its test conversation. The production React build, two component tests, two browser tests, and Ruff passed again. These local results do not claim that a Vercel build or public deployment has already succeeded.
+
+## Vercel dependency-install correction
+
+The first hosted build at commit 82dfb09 built React and seeded the sample database, then failed importing pydantic. Vercel selected pyproject.toml, which previously contained tool settings but no project dependencies. The corrected manifest declares the pinned runtime dependencies from requirements.lock. Test tools remain outside the deployment manifest.
+
+Verified the correction using a fresh Python 3.13 environment: uv installed 67 packages from pyproject.toml; API, Gemini, and PostgreSQL checkpoint imports passed; the previously failing scripts.setup_database command completed against Neon; uv pip check passed. Dependency resolution also passed for x86_64 Linux / Python 3.13. CI now repeats the clean manifest installation and runtime import check. Hosted redeployment is still pending.
+
+Reference: [Vercel Python dependency configuration](https://vercel.com/docs/functions/runtimes/python#dependencies).

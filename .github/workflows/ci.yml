@@ -24,6 +24,12 @@ jobs:
           node-version: "22"
           cache: npm
           cache-dependency-path: frontend/package-lock.json
+      - uses: astral-sh/setup-uv@v6
+      - name: Verify Vercel dependency manifest in a clean environment
+        run: |
+          uv venv .runtime/vercel-deps --python 3.13
+          uv pip install --python .runtime/vercel-deps/bin/python -r pyproject.toml
+          .runtime/vercel-deps/bin/python -c "import pydantic, langchain_google_genai; from backend.app.main import app; from scripts.setup_database import setup; from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver; print('Vercel runtime imports passed')"
       - run: python -m venv .venv
       - run: .venv/bin/python -m pip install -r requirements.lock
       - run: .venv/bin/python -m ruff check backend data scripts evals
