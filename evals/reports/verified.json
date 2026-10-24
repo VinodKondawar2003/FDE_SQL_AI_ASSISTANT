@@ -1587,7 +1587,33 @@
   {
     "run": 2,
     "model": "gemini-3.5-flash-lite",
-    "in_progress": true,
+    "dataset_variant": 1,
+    "counts": {
+      "debug_optimization": {
+        "passed": 8,
+        "total": 8
+      },
+      "security": {
+        "passed": 9,
+        "total": 10
+      },
+      "generation": {
+        "passed": 20,
+        "total": 20
+      },
+      "conversation": {
+        "passed": 10,
+        "total": 10
+      },
+      "ambiguity": {
+        "passed": 1,
+        "total": 6
+      },
+      "scope": {
+        "passed": 0,
+        "total": 6
+      }
+    },
     "results": [
       {
         "id": "G01",
@@ -2192,6 +2218,1747 @@
         ],
         "semantic_match": true,
         "duration_ms": 61425
+      },
+      {
+        "id": "C03",
+        "category": "conversation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"employees\".\"employee_id\" AS \"employee_id\"\nFROM \"employees\" AS \"employees\"",
+            "explanation": {
+              "summary": "This query selects the employee identifier for every employee in the company without any filters or sorting.",
+              "steps": [],
+              "assumptions": [
+                "All employees in the table should be returned."
+              ]
+            },
+            "clarification": null
+          },
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"employees\".\"employee_id\" AS \"employee_id\"\nFROM \"employees\" AS \"employees\"\nWHERE\n  \"employees\".\"hire_date\" >= '2024-01-01'",
+            "explanation": {
+              "summary": "This query retrieves the employee identifiers for all staff members who were hired on or after January 1, 2024.",
+              "steps": [
+                "Filter the records to include only those where the hire date is greater than or equal to January 1, 2024."
+              ],
+              "assumptions": [
+                "Dates are stored in ISO format and comparison uses standard string or date ordering."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 59376
+      },
+      {
+        "id": "C04",
+        "category": "conversation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"products\".\"product_id\" AS \"product_id\",\n  \"products\".\"unit_price_cents\" AS \"unit_price_cents\"\nFROM \"products\" AS \"products\"",
+            "explanation": {
+              "summary": "This query retrieves the product identifier and current unit price in cents for all available products from the catalog.",
+              "steps": [],
+              "assumptions": [
+                "No filtering is applied, so all records in the products table are returned."
+              ]
+            },
+            "clarification": null
+          },
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"products\".\"product_id\" AS \"product_id\",\n  \"products\".\"unit_price_cents\" AS \"unit_price_cents\"\nFROM \"products\" AS \"products\"\nWHERE\n  \"products\".\"active\" = 1",
+            "explanation": {
+              "summary": "This query retrieves the product identifier and unit price in cents for all active products from the products table.",
+              "steps": [
+                "Filter the rows to include only active products where the active column equals one."
+              ],
+              "assumptions": [
+                "Active products are represented by an active value of 1."
+              ]
+            },
+            "clarification": null
+          },
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"products\".\"product_id\" AS \"product_id\",\n  \"products\".\"unit_price_cents\" AS \"unit_price_cents\"\nFROM \"products\" AS \"products\"\nWHERE\n  \"products\".\"active\" = 1\nORDER BY\n  \"products\".\"unit_price_cents\" DESC",
+            "explanation": {
+              "summary": "This query retrieves the product identifier and unit price in cents for all active products, sorting the results in descending order by unit price.",
+              "steps": [
+                "Filter the rows to include only active products where active equals 1.",
+                "Order the final results by unit_price_cents in descending order."
+              ],
+              "assumptions": [
+                "Active products are represented by the value 1 in the active column."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 88766
+      },
+      {
+        "id": "C05",
+        "category": "conversation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"customers\"",
+            "explanation": {
+              "summary": "This query retrieves the unique identifier for every customer present in the database without any filtering or sorting.",
+              "steps": [],
+              "assumptions": [
+                "No filters or limits are applied, so all records from the table are included."
+              ]
+            },
+            "clarification": null
+          },
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"customers\"\nWHERE\n  \"customers\".\"state\" = 'CA'",
+            "explanation": {
+              "summary": "The query retrieves the customer identifier for all customers residing in the state of California.",
+              "steps": [
+                "Filter the customers to include only those where the state is California."
+              ],
+              "assumptions": [
+                "California is represented by the state code CA."
+              ]
+            },
+            "clarification": null
+          },
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"customers\"\nWHERE\n  \"customers\".\"state\" = 'CA'\nORDER BY\n  \"customers\".\"customer_id\" DESC",
+            "explanation": {
+              "summary": "This query selects the customer identification numbers for customers residing in California, ordered by their customer identification number in descending order.",
+              "steps": [
+                "Filter the results to include only customers whose state is California using the state column.",
+                "Sort the final output by customer_id in descending order."
+              ],
+              "assumptions": [
+                "California is represented by the two-letter state code CA."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 90551
+      },
+      {
+        "id": "C06",
+        "category": "conversation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"orders\".\"order_id\" AS \"order_id\"\nFROM \"orders\" AS \"orders\"",
+            "explanation": {
+              "summary": "This query retrieves the unique identifier for every order stored in the database without any filters or sorting.",
+              "steps": [],
+              "assumptions": [
+                "All records in the orders table are requested since no filters were specified."
+              ]
+            },
+            "clarification": null
+          },
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"orders\".\"order_id\" AS \"order_id\"\nFROM \"orders\" AS \"orders\"\nWHERE\n  \"orders\".\"status\" = 'cancelled'",
+            "explanation": {
+              "summary": "This query retrieves the order identifiers for all cancelled orders by filtering the orders table for records where the status is cancelled.",
+              "steps": [
+                "Filter the rows to include only those where the status indicates cancellation"
+              ],
+              "assumptions": [
+                "Cancelled status is represented by the exact text cancelled"
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 60192
+      },
+      {
+        "id": "C07",
+        "category": "conversation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"employees\".\"employee_id\" AS \"employee_id\"\nFROM \"employees\" AS \"employees\"",
+            "explanation": {
+              "summary": "This query retrieves the employee identifier for every employee in the system.",
+              "steps": [
+                "Access the employees table to read employee records."
+              ],
+              "assumptions": [
+                "No filters are applied, so all employees are returned."
+              ]
+            },
+            "clarification": null
+          },
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"employees\".\"employee_id\" AS \"employee_id\"\nFROM \"employees\" AS \"employees\"\nWHERE\n  \"employees\".\"manager_id\" IS NULL",
+            "explanation": {
+              "summary": "The query retrieves the employee identifier for all employees who do not have a manager assigned.",
+              "steps": [
+                "Filter the results to include only records where the manager identifier is missing."
+              ],
+              "assumptions": [
+                "Employees without a manager are top-level staff or executives whose manager identifier is null."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 60059
+      },
+      {
+        "id": "C08",
+        "category": "conversation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"products\".\"product_id\" AS \"product_id\"\nFROM \"products\" AS \"products\"\nWHERE\n  \"products\".\"active\" = 0",
+            "explanation": {
+              "summary": "This query retrieves the product identifier for all inactive products by filtering the products table for records where the active status is zero.",
+              "steps": [
+                "Filter the rows where the active column is equal to zero, representing inactive products."
+              ],
+              "assumptions": [
+                "An active value of zero represents inactive products."
+              ]
+            },
+            "clarification": null
+          },
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"products\".\"product_id\" AS \"product_id\"\nFROM \"products\" AS \"products\"",
+            "explanation": {
+              "summary": "This query retrieves the product identifier for all products regardless of their active status by selecting from the products table.",
+              "steps": [
+                "Access the products table to obtain product records.",
+                "Select the product identifier column for every available product without applying any filters for active status."
+              ],
+              "assumptions": [
+                "All products in the catalog should be included without filtering by activity."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 60158
+      },
+      {
+        "id": "C09",
+        "category": "conversation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"customers\"\nWHERE\n  \"customers\".\"state\" = 'CA'",
+            "explanation": {
+              "summary": "This query selects the customer identifier for all customers located in California by filtering the customer records where the state code matches the standard abbreviation.",
+              "steps": [
+                "Filter the rows to include only those where the state column equals the code for California."
+              ],
+              "assumptions": [
+                "California is represented by the two-letter state code CA."
+              ]
+            },
+            "clarification": null
+          },
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          },
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"customers\"\nWHERE\n  \"customers\".\"state\" = 'CA'\nORDER BY\n  \"customers\".\"customer_id\" ASC",
+            "explanation": {
+              "summary": "This query retrieves the customer identifier for all customers located in California, sorted in ascending order by their customer identifier.",
+              "steps": [
+                "Selects the customer identifier column from the customers table.",
+                "Filters the customer records to include only those where the state is California.",
+                "Sorts the resulting customer identifiers in ascending order by customer identifier."
+              ],
+              "assumptions": [
+                "California is represented by the two-letter state code CA."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 70346
+      },
+      {
+        "id": "C10",
+        "category": "conversation",
+        "passed": true,
+        "turns": [
+          {
+            "status": "clarification_required",
+            "expected": "clarification_required",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": {
+              "question": "Do you mean on or after January 1, 2024, or after January ends?",
+              "choices": [
+                "January 1, 2024 inclusive",
+                "February 1, 2024 inclusive"
+              ]
+            }
+          },
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"employees\".\"employee_id\" AS \"employee_id\"\nFROM \"employees\" AS \"employees\"\nWHERE\n  \"employees\".\"hire_date\" >= '2024-02-01'",
+            "explanation": {
+              "summary": "This query retrieves the employee identifiers for all employees hired on or after February 1, 2024.",
+              "steps": [
+                "Filter the records to include only those where the hire date is greater than or equal to February 1, 2024."
+              ],
+              "assumptions": [
+                "The boundary for hiring dates starting after January 2024 ends is interpreted as February 1, 2024 inclusive."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 31121
+      },
+      {
+        "id": "D01",
+        "category": "debug_optimization",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"customers\"",
+            "explanation": {
+              "summary": "The query retrieves customer identification numbers from the customers table without any filtering or sorting.",
+              "steps": [],
+              "assumptions": [
+                "No filters or limits are applied, so all customer records are considered."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 18692
+      },
+      {
+        "id": "D02",
+        "category": "debug_optimization",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"customers\"",
+            "explanation": {
+              "summary": "This query selects the customer identifier from the customers table without any filters or aggregations.",
+              "steps": [],
+              "assumptions": [
+                "No filters or limits are applied to the dataset"
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 20331
+      },
+      {
+        "id": "D03",
+        "category": "debug_optimization",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"customers\"\nWHERE\n  \"customers\".\"state\" = 'CA'",
+            "explanation": {
+              "summary": "This query selects the customer identification numbers for all customers located in the state of California by filtering the customer records where the state code matches the two-letter abbreviation for California.",
+              "steps": [
+                "Examine the customers table to access customer details.",
+                "Filter the customer records using the state column to retain only those where the value is the two-letter state code for California.",
+                "Select the customer identification number for each matching record."
+              ],
+              "assumptions": [
+                "The state column stores standard two-letter uppercase abbreviations for US states."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 20333
+      },
+      {
+        "id": "D04",
+        "category": "debug_optimization",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"c\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"c\"\nJOIN \"orders\" AS \"o\"\n  ON \"c\".\"customer_id\" = \"o\".\"customer_id\"\nWHERE\n  \"c\".\"customer_id\" = 1",
+            "explanation": {
+              "summary": "This query selects the customer identifier for records that exist in both the customers and orders tables, filtered specifically for the customer identifier equal to one.",
+              "steps": [
+                "Join the orders table using the customer identifier relationship.",
+                "Filter the results to include only rows where the customer identifier equals one."
+              ],
+              "assumptions": [
+                "The ambiguous customer identifier column in the filter clause refers to the customer table."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 21009
+      },
+      {
+        "id": "D05",
+        "category": "debug_optimization",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"customers\"\nWHERE\n  \"customers\".\"state\" = 'CA'",
+            "explanation": {
+              "summary": "This query selects the customer identifiers for all customers residing in California.",
+              "steps": [
+                "Filter the customer rows to include only those where the state column matches the two-letter code for California."
+              ],
+              "assumptions": [
+                "States are stored as two-letter uppercase abbreviations."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 21062
+      },
+      {
+        "id": "D06",
+        "category": "debug_optimization",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"o\".\"order_id\" AS \"order_id\"\nFROM \"orders\" AS \"o\"",
+            "explanation": {
+              "summary": "This query retrieves the unique identifier for every order by selecting directly from the orders table.",
+              "steps": [],
+              "assumptions": [
+                "The join with the customers table was redundant and removed because no customer data is selected or used for filtering."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 19767
+      },
+      {
+        "id": "D07",
+        "category": "debug_optimization",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"c\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"c\"\nJOIN \"orders\" AS \"o\"\n  ON \"c\".\"customer_id\" = \"o\".\"customer_id\"",
+            "explanation": {
+              "summary": "Retrieves data from customers, orders.",
+              "steps": [
+                "The SQL passed syntax, schema, relationship, and read-only validation.",
+                "Review the SQL panel for the exact filters, calculations, ordering, and limits."
+              ],
+              "assumptions": [
+                "A detailed AI explanation was unavailable; this is a structural summary."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 17382
+      },
+      {
+        "id": "D08",
+        "category": "debug_optimization",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  COUNT(*) AS \"_col_0\"\nFROM \"customers\" AS \"customers\"",
+            "explanation": {
+              "summary": "Retrieves data from customers.",
+              "steps": [
+                "The SQL passed syntax, schema, relationship, and read-only validation.",
+                "Review the SQL panel for the exact filters, calculations, ordering, and limits."
+              ],
+              "assumptions": [
+                "A detailed AI explanation was unavailable; this is a structural summary."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 8097
+      },
+      {
+        "id": "A1",
+        "category": "ambiguity",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10016
+      },
+      {
+        "id": "A2",
+        "category": "ambiguity",
+        "passed": true,
+        "turns": [
+          {
+            "status": "clarification_required",
+            "expected": "clarification_required",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": {
+              "question": "Do you mean on or after January 1, 2024, or after January ends?",
+              "choices": [
+                "January 1, 2024 inclusive",
+                "February 1, 2024 inclusive"
+              ]
+            }
+          }
+        ],
+        "duration_ms": 10
+      },
+      {
+        "id": "A3",
+        "category": "ambiguity",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10098
+      },
+      {
+        "id": "A4",
+        "category": "ambiguity",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10231
+      },
+      {
+        "id": "A5",
+        "category": "ambiguity",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 9828
+      },
+      {
+        "id": "A6",
+        "category": "ambiguity",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 9730
+      },
+      {
+        "id": "O1",
+        "category": "scope",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10043
+      },
+      {
+        "id": "O2",
+        "category": "scope",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10022
+      },
+      {
+        "id": "O3",
+        "category": "scope",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10049
+      },
+      {
+        "id": "O4",
+        "category": "scope",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10042
+      },
+      {
+        "id": "O5",
+        "category": "scope",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10009
+      },
+      {
+        "id": "O6",
+        "category": "scope",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 9947
+      },
+      {
+        "id": "S1",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 11
+      },
+      {
+        "id": "S2",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 11
+      },
+      {
+        "id": "S3",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 11
+      },
+      {
+        "id": "S4",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 10
+      },
+      {
+        "id": "S5",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 15
+      },
+      {
+        "id": "S6",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 11
+      },
+      {
+        "id": "S7",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 11
+      },
+      {
+        "id": "S8",
+        "category": "security",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 9921
+      },
+      {
+        "id": "S9",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 11
+      },
+      {
+        "id": "S10",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 11
+      }
+    ]
+  },
+  {
+    "run": 3,
+    "model": "gemini-3.5-flash-lite",
+    "dataset_variant": 2,
+    "counts": {
+      "debug_optimization": {
+        "passed": 4,
+        "total": 8
+      },
+      "security": {
+        "passed": 9,
+        "total": 10
+      },
+      "generation": {
+        "passed": 0,
+        "total": 20
+      },
+      "conversation": {
+        "passed": 0,
+        "total": 10
+      },
+      "ambiguity": {
+        "passed": 1,
+        "total": 6
+      },
+      "scope": {
+        "passed": 0,
+        "total": 6
+      }
+    },
+    "results": [
+      {
+        "id": "G01",
+        "category": "generation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 359
+      },
+      {
+        "id": "G02",
+        "category": "generation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 5387
+      },
+      {
+        "id": "G03",
+        "category": "generation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 9976
+      },
+      {
+        "id": "G04",
+        "category": "generation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 9995
+      },
+      {
+        "id": "G05",
+        "category": "generation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10081
+      },
+      {
+        "id": "G06",
+        "category": "generation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10049
+      },
+      {
+        "id": "G07",
+        "category": "generation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10024
+      },
+      {
+        "id": "G08",
+        "category": "generation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10013
+      },
+      {
+        "id": "G09",
+        "category": "generation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 9989
+      },
+      {
+        "id": "G10",
+        "category": "generation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10015
+      },
+      {
+        "id": "G11",
+        "category": "generation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10074
+      },
+      {
+        "id": "G12",
+        "category": "generation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 9982
+      },
+      {
+        "id": "G13",
+        "category": "generation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 9976
+      },
+      {
+        "id": "G14",
+        "category": "generation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10067
+      },
+      {
+        "id": "G15",
+        "category": "generation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10061
+      },
+      {
+        "id": "G16",
+        "category": "generation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 9983
+      },
+      {
+        "id": "G17",
+        "category": "generation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 9927
+      },
+      {
+        "id": "G18",
+        "category": "generation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 9966
+      },
+      {
+        "id": "G19",
+        "category": "generation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10069
+      },
+      {
+        "id": "G20",
+        "category": "generation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10097
+      },
+      {
+        "id": "C01",
+        "category": "conversation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10027
+      },
+      {
+        "id": "C02",
+        "category": "conversation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 9942
+      },
+      {
+        "id": "C03",
+        "category": "conversation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10011
+      },
+      {
+        "id": "C04",
+        "category": "conversation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10075
+      },
+      {
+        "id": "C05",
+        "category": "conversation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 9971
+      },
+      {
+        "id": "C06",
+        "category": "conversation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 9999
+      },
+      {
+        "id": "C07",
+        "category": "conversation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10058
+      },
+      {
+        "id": "C08",
+        "category": "conversation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 9965
+      },
+      {
+        "id": "C09",
+        "category": "conversation",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 9935
+      },
+      {
+        "id": "C10",
+        "category": "conversation",
+        "passed": false,
+        "turns": [
+          {
+            "status": "clarification_required",
+            "expected": "clarification_required",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": {
+              "question": "Do you mean on or after January 1, 2024, or after January ends?",
+              "choices": [
+                "January 1, 2024 inclusive",
+                "February 1, 2024 inclusive"
+              ]
+            }
+          },
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10015
+      },
+      {
+        "id": "D01",
+        "category": "debug_optimization",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10020
+      },
+      {
+        "id": "D02",
+        "category": "debug_optimization",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10062
+      },
+      {
+        "id": "D03",
+        "category": "debug_optimization",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10034
+      },
+      {
+        "id": "D04",
+        "category": "debug_optimization",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10314
+      },
+      {
+        "id": "D05",
+        "category": "debug_optimization",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"customers\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"customers\"\nWHERE\n  \"customers\".\"state\" = 'CA'",
+            "explanation": {
+              "summary": "Retrieves data from customers.",
+              "steps": [
+                "The SQL passed syntax, schema, relationship, and read-only validation.",
+                "Review the SQL panel for the exact filters, calculations, ordering, and limits."
+              ],
+              "assumptions": [
+                "A detailed AI explanation was unavailable; this is a structural summary."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 20072
+      },
+      {
+        "id": "D06",
+        "category": "debug_optimization",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"o\".\"order_id\" AS \"order_id\"\nFROM \"orders\" AS \"o\"",
+            "explanation": {
+              "summary": "Retrieves data from orders.",
+              "steps": [
+                "The SQL passed syntax, schema, relationship, and read-only validation.",
+                "Review the SQL panel for the exact filters, calculations, ordering, and limits."
+              ],
+              "assumptions": [
+                "A detailed AI explanation was unavailable; this is a structural summary."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 19640
+      },
+      {
+        "id": "D07",
+        "category": "debug_optimization",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  \"c\".\"customer_id\" AS \"customer_id\"\nFROM \"customers\" AS \"c\"\nJOIN \"orders\" AS \"o\"\n  ON \"c\".\"customer_id\" = \"o\".\"customer_id\"",
+            "explanation": {
+              "summary": "Retrieves data from customers, orders.",
+              "steps": [
+                "The SQL passed syntax, schema, relationship, and read-only validation.",
+                "Review the SQL panel for the exact filters, calculations, ordering, and limits."
+              ],
+              "assumptions": [
+                "A detailed AI explanation was unavailable; this is a structural summary."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 19972
+      },
+      {
+        "id": "D08",
+        "category": "debug_optimization",
+        "passed": true,
+        "turns": [
+          {
+            "status": "completed",
+            "expected": "completed",
+            "correct_status": true,
+            "sql": "SELECT\n  COUNT(*) AS \"_col_0\"\nFROM \"customers\" AS \"customers\"",
+            "explanation": {
+              "summary": "Retrieves data from customers.",
+              "steps": [
+                "The SQL passed syntax, schema, relationship, and read-only validation.",
+                "Review the SQL panel for the exact filters, calculations, ordering, and limits."
+              ],
+              "assumptions": [
+                "A detailed AI explanation was unavailable; this is a structural summary."
+              ]
+            },
+            "clarification": null
+          }
+        ],
+        "semantic_match": true,
+        "duration_ms": 10096
+      },
+      {
+        "id": "A1",
+        "category": "ambiguity",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 9963
+      },
+      {
+        "id": "A2",
+        "category": "ambiguity",
+        "passed": true,
+        "turns": [
+          {
+            "status": "clarification_required",
+            "expected": "clarification_required",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": {
+              "question": "Do you mean on or after January 1, 2024, or after January ends?",
+              "choices": [
+                "January 1, 2024 inclusive",
+                "February 1, 2024 inclusive"
+              ]
+            }
+          }
+        ],
+        "duration_ms": 11
+      },
+      {
+        "id": "A3",
+        "category": "ambiguity",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 9947
+      },
+      {
+        "id": "A4",
+        "category": "ambiguity",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10049
+      },
+      {
+        "id": "A5",
+        "category": "ambiguity",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10074
+      },
+      {
+        "id": "A6",
+        "category": "ambiguity",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 9998
+      },
+      {
+        "id": "O1",
+        "category": "scope",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10014
+      },
+      {
+        "id": "O2",
+        "category": "scope",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10052
+      },
+      {
+        "id": "O3",
+        "category": "scope",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 9972
+      },
+      {
+        "id": "O4",
+        "category": "scope",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 9990
+      },
+      {
+        "id": "O5",
+        "category": "scope",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 9983
+      },
+      {
+        "id": "O6",
+        "category": "scope",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 10000
+      },
+      {
+        "id": "S1",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 11
+      },
+      {
+        "id": "S2",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 11
+      },
+      {
+        "id": "S3",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 11
+      },
+      {
+        "id": "S4",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 10
+      },
+      {
+        "id": "S5",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 11
+      },
+      {
+        "id": "S6",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 11
+      },
+      {
+        "id": "S7",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 10
+      },
+      {
+        "id": "S8",
+        "category": "security",
+        "passed": false,
+        "turns": [
+          {
+            "error": "AppError",
+            "code": "MODEL_RATE_LIMIT"
+          }
+        ],
+        "duration_ms": 9981
+      },
+      {
+        "id": "S9",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 10
+      },
+      {
+        "id": "S10",
+        "category": "security",
+        "passed": true,
+        "turns": [
+          {
+            "status": "refused",
+            "expected": "refused",
+            "correct_status": true,
+            "sql": null,
+            "explanation": null,
+            "clarification": null
+          }
+        ],
+        "duration_ms": 10
       }
     ]
   }
